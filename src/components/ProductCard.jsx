@@ -1,12 +1,94 @@
 import { useCart } from '../context/CartContext.jsx';
 import { useWishlist } from '../context/WishlistContext.jsx';
 
-export function ProductCard({ product, onSelectProduct }) {
+export function ProductCard({ product, onSelectProduct, viewMode = 'grid' }) {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
 
   const isWishlisted = isInWishlist(product.id);
   const discount = product.discount || (product.originalPrice ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 0);
+
+  if (viewMode === 'list') {
+    return (
+      <div className="group relative rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-4 shadow-sm hover:shadow-xl dark:hover:shadow-2xl transition-all duration-300 flex flex-col sm:flex-row items-center gap-6 overflow-hidden">
+        {/* Product Image Box */}
+        <div 
+          onClick={() => onSelectProduct && onSelectProduct(product.id)}
+          className="relative w-full sm:w-48 aspect-square rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden cursor-pointer shrink-0"
+        >
+          <img
+            src={product.images && product.images.length > 0 ? product.images[0] : 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=600'}
+            alt={product.title}
+            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+            loading="lazy"
+          />
+          {discount > 0 && (
+            <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-rose-500 text-white text-[10px] font-extrabold">
+              -{discount}%
+            </span>
+          )}
+        </div>
+
+        {/* Content Details */}
+        <div className="flex-1 flex flex-col justify-between h-full space-y-2 text-center sm:text-left w-full">
+          <div>
+            <div className="flex items-center justify-between gap-2 text-[11px] font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-wider mb-1">
+              <span>{product.brand || product.category}</span>
+              <div className="flex items-center gap-1 text-slate-500">
+                <span className="text-amber-400">★</span>
+                <span className="font-bold text-slate-700 dark:text-slate-200">{product.rating || 4.5}</span>
+                <span>({product.reviewCount || 0})</span>
+              </div>
+            </div>
+
+            <h3 
+              onClick={() => onSelectProduct && onSelectProduct(product.id)}
+              className="font-display font-bold text-base text-slate-900 dark:text-slate-100 hover:text-brand-500 cursor-pointer line-clamp-1"
+            >
+              {product.title}
+            </h3>
+
+            <p className="text-xs text-slate-500 line-clamp-2 mt-1 font-light">
+              {product.description}
+            </p>
+          </div>
+
+          <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
+            <div className="flex items-baseline gap-2">
+              <span className="font-display font-black text-xl text-slate-900 dark:text-white">
+                ${product.price ? product.price.toFixed(2) : '0.00'}
+              </span>
+              {product.originalPrice && product.originalPrice > product.price && (
+                <span className="text-xs text-slate-400 line-through">
+                  ${product.originalPrice.toFixed(2)}
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => toggleWishlist(product)}
+                className={`p-2.5 rounded-xl border transition-all ${
+                  isWishlisted
+                    ? 'bg-rose-500 text-white border-rose-500'
+                    : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-rose-500 hover:text-white'
+                }`}
+              >
+                ♥
+              </button>
+              <button
+                onClick={() => addToCart(product, 1)}
+                disabled={!product.inStock}
+                className="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold shadow-md active:scale-95 transition-all"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="group relative rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-3.5 shadow-sm hover:shadow-xl dark:hover:shadow-2xl dark:hover:shadow-brand-950/30 transition-all duration-300 flex flex-col justify-between overflow-hidden">

@@ -34,30 +34,41 @@ export function Navbar({ onNavigate, currentView, searchQuery, setSearchQuery, s
 
   return (
     <header className="sticky top-0 z-40 w-full glass-panel dark:glass-panel glass-panel-light shadow-lg transition-all duration-300">
-      {/* Top Banner Alert */}
-      <div className="bg-gradient-to-r from-brand-600 via-indigo-600 to-cyan-600 text-white text-xs font-semibold py-1.5 px-4 text-center tracking-wide shadow-sm flex items-center justify-center gap-2">
-        <span className="bg-white/20 px-2 py-0.5 rounded-full text-[10px] uppercase font-bold">LIMITED DEAL</span>
-        <span>Get 20% OFF on your first purchase! Use promo code <strong className="underline underline-offset-2">AURA20</strong> at checkout.</span>
+      {/* Top Banner Alert - Festive Sale */}
+      <div className="bg-gradient-to-r from-amber-600 via-rose-600 to-indigo-600 text-white text-xs font-semibold py-1.5 px-4 text-center tracking-wide shadow-sm flex items-center justify-center gap-2">
+        <span className="bg-white/20 px-2 py-0.5 rounded-full text-[10px] uppercase font-bold">🪔 DIWALI DHAMAKA</span>
+        <span>Great Indian Festive Sale Live! Get Extra 20% OFF using promo code <strong className="underline underline-offset-2">DIWALI20</strong></span>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20 gap-4">
           
-          {/* Logo */}
-          <div 
-            onClick={() => onNavigate('home')}
-            className="flex items-center gap-3 cursor-pointer group"
-          >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 via-brand-600 to-brand-accent flex items-center justify-center shadow-glow group-hover:scale-105 transition-transform duration-300">
-              <span className="text-white font-display font-black text-xl tracking-tighter">A</span>
+          {/* Logo & Location */}
+          <div className="flex items-center gap-4">
+            <div 
+              onClick={() => onNavigate('home')}
+              className="flex items-center gap-3 cursor-pointer group"
+            >
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 via-brand-600 to-brand-accent flex items-center justify-center shadow-glow group-hover:scale-105 transition-transform duration-300">
+                <span className="text-white font-display font-black text-xl tracking-tighter">A</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-display font-extrabold text-2xl tracking-wider text-slate-900 dark:text-white group-hover:text-brand-500 transition-colors">
+                  AURA<span className="text-brand-500">.in</span>
+                </span>
+                <span className="text-[10px] uppercase tracking-widest text-slate-500 dark:text-slate-400 font-semibold -mt-1">
+                  India E-Commerce
+                </span>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <span className="font-display font-extrabold text-2xl tracking-wider text-slate-900 dark:text-white group-hover:text-brand-500 transition-colors">
-                AURA<span className="text-brand-500">.</span>
-              </span>
-              <span className="text-[10px] uppercase tracking-widest text-slate-500 dark:text-slate-400 font-semibold -mt-1">
-                Luxe Commerce
-              </span>
+
+            {/* Pincode Location Indicator */}
+            <div className="hidden xl:flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800/60 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700/60">
+              <span className="text-brand-500 font-bold">📍</span>
+              <div className="flex flex-col text-[11px] leading-tight">
+                <span className="text-[10px] text-slate-400 font-medium">Deliver to</span>
+                <span className="font-bold text-slate-800 dark:text-slate-200">Bengaluru 560038</span>
+              </div>
             </div>
           </div>
 
@@ -70,7 +81,7 @@ export function Navbar({ onNavigate, currentView, searchQuery, setSearchQuery, s
 
               <input
                 type="text"
-                placeholder="Search products, brands, or categories..."
+                placeholder="Search products, brands, or categories in ₹..."
                 value={searchQuery}
                 onFocus={() => setIsSearchFocused(true)}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -99,14 +110,14 @@ export function Navbar({ onNavigate, currentView, searchQuery, setSearchQuery, s
             {isSearchFocused && (
               <div className="absolute top-full left-0 right-0 mt-2 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
-                  Popular Categories
+                  Popular Festive Categories
                 </div>
                 <div className="flex flex-wrap gap-2 mb-3">
-                  {['Electronics', 'Fashion', 'Home Decor', 'Beauty', 'Sports', 'Books'].map((cat) => (
+                  {['Fashion', 'Electronics', 'Home & Kitchen', 'Beauty', 'Sports', 'Books'].map((cat) => (
                     <button
                       key={cat}
                       onClick={() => {
-                        setSelectedCategory(cat.toLowerCase().replace(' ', '-'));
+                        setSelectedCategory(cat.toLowerCase().replace(' ', '-').replace('&-', ''));
                         setSearchQuery('');
                         setIsSearchFocused(false);
                         onNavigate('products');
@@ -125,7 +136,7 @@ export function Navbar({ onNavigate, currentView, searchQuery, setSearchQuery, s
                     }}
                     className="p-2.5 rounded-xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-800 text-xs font-medium text-brand-600 dark:text-brand-400 cursor-pointer hover:underline"
                   >
-                    View all search results for "{searchQuery}" →
+                    View all results for "{searchQuery}" in ₹ →
                   </div>
                 )}
               </div>
@@ -178,7 +189,7 @@ export function Navbar({ onNavigate, currentView, searchQuery, setSearchQuery, s
             <button
               onClick={() => onNavigate('wishlist')}
               className="relative p-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors group"
-              title="View Wishlist"
+              title="View Saved Wishlist"
             >
               <i data-lucide="heart" className="w-5 h-5 group-hover:text-rose-500 transition-colors"></i>
               {wishlistCount > 0 && (
@@ -313,72 +324,6 @@ export function Navbar({ onNavigate, currentView, searchQuery, setSearchQuery, s
 
         </div>
       </div>
-
-      {/* Mobile Drawer Menu */}
-      {isMobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-200 dark:border-slate-800 px-4 pt-3 pb-6 space-y-3 bg-white dark:bg-slate-900">
-          <form onSubmit={handleSearchSubmit} className="w-full relative">
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-4 pr-10 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm text-slate-900 dark:text-white"
-            />
-          </form>
-
-          <div className="grid grid-cols-2 gap-2 pt-2">
-            <button
-              onClick={() => {
-                onNavigate('home');
-                setIsMobileMenuOpen(false);
-              }}
-              className="px-3 py-2 text-left text-sm font-medium rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800"
-            >
-              🏠 Home
-            </button>
-            <button
-              onClick={() => {
-                onNavigate('products');
-                setIsMobileMenuOpen(false);
-              }}
-              className="px-3 py-2 text-left text-sm font-medium rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800"
-            >
-              🛍️ All Products
-            </button>
-            <button
-              onClick={() => {
-                onNavigate('wishlist');
-                setIsMobileMenuOpen(false);
-              }}
-              className="px-3 py-2 text-left text-sm font-medium rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800"
-            >
-              ❤️ Wishlist ({wishlistCount})
-            </button>
-            {user ? (
-              <button
-                onClick={() => {
-                  onNavigate('orders');
-                  setIsMobileMenuOpen(false);
-                }}
-                className="px-3 py-2 text-left text-sm font-medium rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800"
-              >
-                📦 My Orders
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  onNavigate('login');
-                  setIsMobileMenuOpen(false);
-                }}
-                className="px-3 py-2 text-left text-sm font-medium rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800"
-              >
-                🔑 Sign In
-              </button>
-            )}
-          </div>
-        </div>
-      )}
     </header>
   );
 }

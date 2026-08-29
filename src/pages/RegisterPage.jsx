@@ -9,11 +9,17 @@ export function RegisterPage({ onNavigate }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name || !email || !password) {
       addToast('Please complete all registration fields', 'error');
+      return;
+    }
+
+    if (password.length < 6) {
+      addToast('Password must be at least 6 characters long', 'error');
       return;
     }
 
@@ -62,9 +68,18 @@ export function RegisterPage({ onNavigate }) {
         </div>
 
         <div>
-          <label className="font-bold text-slate-500 dark:text-slate-400">Password</label>
+          <div className="flex justify-between items-center">
+            <label className="font-bold text-slate-500 dark:text-slate-400">Password (Min 6 chars)</label>
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="text-[11px] text-brand-600 dark:text-brand-400 font-semibold hover:underline"
+            >
+              {showPassword ? 'Hide Password' : 'Show Password'}
+            </button>
+          </div>
           <input
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             required
             placeholder="••••••••"
             value={password}

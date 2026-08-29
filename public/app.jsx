@@ -3787,6 +3787,7 @@ function LoginPage({ onNavigate }) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -3834,14 +3835,14 @@ function LoginPage({ onNavigate }) {
           <button
             type="button"
             onClick={fillDemoUser}
-            className="flex-1 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-brand-300 dark:border-slate-700 text-slate-900 dark:text-white font-semibold text-[11px] hover:border-brand-500"
+            className="flex-1 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-brand-300 dark:border-slate-700 text-slate-900 dark:text-white font-semibold text-[11px] hover:border-brand-500 transition-colors"
           >
             👤 Customer Demo
           </button>
           <button
             type="button"
             onClick={fillDemoAdmin}
-            className="flex-1 py-1.5 rounded-xl bg-amber-500/20 border border-amber-500/30 text-amber-600 dark:text-amber-400 font-semibold text-[11px] hover:bg-amber-500/30"
+            className="flex-1 py-1.5 rounded-xl bg-amber-500/20 border border-amber-500/30 text-amber-600 dark:text-amber-400 font-semibold text-[11px] hover:bg-amber-500/30 transition-colors"
           >
             ★ Admin Demo
           </button>
@@ -3854,6 +3855,7 @@ function LoginPage({ onNavigate }) {
           <input
             type="email"
             required
+            placeholder="name@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full mt-1 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
@@ -3861,10 +3863,20 @@ function LoginPage({ onNavigate }) {
         </div>
 
         <div>
-          <label className="font-bold text-slate-500 dark:text-slate-400">Password</label>
+          <div className="flex justify-between items-center">
+            <label className="font-bold text-slate-500 dark:text-slate-400">Password</label>
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="text-[11px] text-brand-600 dark:text-brand-400 font-semibold hover:underline"
+            >
+              {showPassword ? 'Hide Password' : 'Show Password'}
+            </button>
+          </div>
           <input
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             required
+            placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full mt-1 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
@@ -3901,11 +3913,17 @@ function RegisterPage({ onNavigate }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name || !email || !password) {
       addToast('Please complete all registration fields', 'error');
+      return;
+    }
+
+    if (password.length < 6) {
+      addToast('Password must be at least 6 characters long', 'error');
       return;
     }
 
@@ -3954,9 +3972,18 @@ function RegisterPage({ onNavigate }) {
         </div>
 
         <div>
-          <label className="font-bold text-slate-500 dark:text-slate-400">Password</label>
+          <div className="flex justify-between items-center">
+            <label className="font-bold text-slate-500 dark:text-slate-400">Password (Min 6 chars)</label>
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="text-[11px] text-brand-600 dark:text-brand-400 font-semibold hover:underline"
+            >
+              {showPassword ? 'Hide Password' : 'Show Password'}
+            </button>
+          </div>
           <input
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             required
             placeholder="••••••••"
             value={password}

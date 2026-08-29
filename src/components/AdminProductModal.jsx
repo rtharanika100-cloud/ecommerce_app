@@ -132,21 +132,23 @@ export function AdminProductModal({ product, categories = [], onClose, onSaved }
 
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="font-bold text-slate-500">Selling Price ($) *</label>
+              <label className="font-bold text-slate-500">Selling Price (₹) *</label>
               <input
                 type="number"
-                step="0.01"
+                step="1"
                 required
+                placeholder="4999"
                 value={formData.price}
                 onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                 className="w-full mt-1 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white"
               />
             </div>
             <div>
-              <label className="font-bold text-slate-500">Original Price ($)</label>
+              <label className="font-bold text-slate-500">Original MRP (₹)</label>
               <input
                 type="number"
-                step="0.01"
+                step="1"
+                placeholder="8999"
                 value={formData.originalPrice}
                 onChange={(e) => setFormData({ ...formData, originalPrice: e.target.value })}
                 className="w-full mt-1 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white"
@@ -192,7 +194,7 @@ export function AdminProductModal({ product, categories = [], onClose, onSaved }
                 onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
                 className="w-4 h-4 rounded text-brand-600 focus:ring-brand-500"
               />
-              <span>Mark as Featured Item</span>
+              <span>Mark as Festive Deal</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -201,7 +203,7 @@ export function AdminProductModal({ product, categories = [], onClose, onSaved }
                 onChange={(e) => setFormData({ ...formData, isTrending: e.target.checked })}
                 className="w-4 h-4 rounded text-brand-600 focus:ring-brand-500"
               />
-              <span>Mark as Trending Deal</span>
+              <span>Mark as Trending Item</span>
             </label>
           </div>
 

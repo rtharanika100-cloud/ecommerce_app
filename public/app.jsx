@@ -3332,6 +3332,7 @@ function OrdersPage({ onNavigate }) {
   const { user } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedInvoiceOrder, setSelectedInvoiceOrder] = useState(null);
 
   useEffect(() => {
     async function fetchUserOrders() {
@@ -3418,11 +3419,19 @@ function OrdersPage({ onNavigate }) {
                     </p>
                   </div>
 
-                  <div className="text-right">
-                    <span className="text-xs text-slate-400">Total Paid</span>
-                    <p className="font-display font-black text-lg text-slate-900 dark:text-white">
-                      {formatINR(order.totalAmount)}
-                    </p>
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={() => setSelectedInvoiceOrder(order)}
+                      className="px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-brand-500 hover:text-white text-xs font-semibold transition-all border border-slate-200 dark:border-slate-700"
+                    >
+                      📄 GST Tax Invoice
+                    </button>
+                    <div className="text-right">
+                      <span className="text-xs text-slate-400">Total Paid</span>
+                      <p className="font-display font-black text-lg text-slate-900 dark:text-white">
+                        {formatINR(order.totalAmount)}
+                      </p>
+                    </div>
                   </div>
                 </div>
 
@@ -3469,6 +3478,73 @@ function OrdersPage({ onNavigate }) {
               </div>
             );
           })}
+        </div>
+      )}
+
+      {/* GST Invoice Modal Preview */}
+      {selectedInvoiceOrder && (
+        <div className="fixed inset-0 z-50 p-4 flex items-center justify-center">
+          <div onClick={() => setSelectedInvoiceOrder(null)} className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm" />
+
+          <div className="relative w-full max-w-xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 z-10 text-slate-900 dark:text-white space-y-6">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+              <div className="flex items-center gap-2">
+                <span className="font-display font-black text-xl">TAX INVOICE</span>
+                <span className="px-2 py-0.5 rounded bg-brand-500/20 text-brand-500 font-bold text-[10px]">GSTIN: 29AABCA1234F1Z9</span>
+              </div>
+              <button onClick={() => setSelectedInvoiceOrder(null)} className="text-slate-400 hover:text-white font-bold">✕</button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 text-xs">
+              <div className="space-y-1">
+                <p className="font-bold text-slate-400">Billed To:</p>
+                <p className="font-bold">{selectedInvoiceOrder.customerName}</p>
+                <p className="text-slate-500">{selectedInvoiceOrder.shippingAddress.street}, {selectedInvoiceOrder.shippingAddress.city}, {selectedInvoiceOrder.shippingAddress.state} - {selectedInvoiceOrder.shippingAddress.pincode}</p>
+              </div>
+              <div className="space-y-1 text-right">
+                <p className="font-bold text-slate-400">Invoice Details:</p>
+                <p>Invoice #: <strong>INV-{selectedInvoiceOrder.id}</strong></p>
+                <p>Date: {new Date(selectedInvoiceOrder.date).toLocaleDateString()}</p>
+                <p>Payment: {selectedInvoiceOrder.paymentMethod}</p>
+              </div>
+            </div>
+
+            {/* Table */}
+            <div className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden text-xs">
+              <table className="w-full text-left">
+                <thead className="bg-slate-100 dark:bg-slate-800 font-bold">
+                  <tr>
+                    <th className="p-2.5">Item Description</th>
+                    <th className="p-2.5 text-center">Qty</th>
+                    <th className="p-2.5 text-right">Amount</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {selectedInvoiceOrder.items.map((item, idx) => (
+                    <tr key={idx}>
+                      <td className="p-2.5 font-medium">{item.title}</td>
+                      <td className="p-2.5 text-center">{item.quantity}</td>
+                      <td className="p-2.5 text-right font-bold">{formatINR(item.price * item.quantity)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="flex justify-between items-center pt-2 text-xs border-t border-slate-200 dark:border-slate-800">
+              <span className="font-bold">Total Invoice Amount:</span>
+              <span className="font-display font-black text-xl text-brand-600 dark:text-brand-400">{formatINR(selectedInvoiceOrder.totalAmount)}</span>
+            </div>
+
+            <div className="flex justify-end gap-3 pt-2">
+              <button
+                onClick={() => window.print()}
+                className="px-4 py-2 rounded-xl bg-brand-600 text-white font-semibold text-xs shadow-md"
+              >
+                🖨️ Print / Download PDF
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

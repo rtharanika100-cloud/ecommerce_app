@@ -1792,6 +1792,12 @@ function ReviewSection({ productId, reviews = [], onReviewSubmitted }) {
 
 /* --- File: src/components/CheckoutWizard.jsx --- */
 
+const INDIAN_STATES = [
+  'Andhra Pradesh', 'Assam', 'Bihar', 'Delhi NCR', 'Gujarat', 'Haryana',
+  'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Punjab',
+  'Rajasthan', 'Tamil Nadu', 'Telangana', 'Uttar Pradesh', 'West Bengal'
+];
+
 function CheckoutWizard({ onNavigate }) {
   const { cartItems, subtotal, shippingFee, tax, total, clearCart } = useCart();
   const { user } = useAuth();
@@ -1811,7 +1817,7 @@ function CheckoutWizard({ onNavigate }) {
     phone: user && user.phone ? user.phone : '+91 98765 43210'
   });
 
-  const [paymentMethod, setPaymentMethod] = useState('UPI (Google Pay / PhonePe)');
+  const [paymentMethod, setPaymentMethod] = useState('UPI (Google Pay / PhonePe / Paytm)');
   const [upiId, setUpiId] = useState('aarav@okaxis');
 
   const handleNext = (e) => {
@@ -1989,13 +1995,15 @@ function CheckoutWizard({ onNavigate }) {
                 </div>
                 <div>
                   <label className="text-xs font-bold text-slate-500 dark:text-slate-400">State *</label>
-                  <input
-                    type="text"
-                    required
+                  <select
                     value={shippingAddress.state}
                     onChange={(e) => setShippingAddress({ ...shippingAddress, state: e.target.value })}
-                    className="w-full mt-1 px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
-                  />
+                    className="w-full mt-1 px-2.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                  >
+                    {INDIAN_STATES.map((st) => (
+                      <option key={st} value={st}>{st}</option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Pincode (6 digits) *</label>

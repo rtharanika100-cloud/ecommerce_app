@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# System & OS
+.DS_Store
+Thumbs.db
+
+# Logs & Temporary files
+*.log
+.system_generated/
+
+# Environment
+.env
+.env.local

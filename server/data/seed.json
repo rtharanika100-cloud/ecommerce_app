@@ -1,0 +1,470 @@
+{
+  "users": [
+    {
+      "id": "usr_1",
+      "name": "Alex Johnson",
+      "email": "user@example.com",
+      "password": "password123",
+      "role": "user",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200",
+      "address": "742 Evergreen Terrace, Springfield",
+      "phone": "+1 (555) 234-5678"
+    },
+    {
+      "id": "usr_admin",
+      "name": "Sarah Admin",
+      "email": "admin@example.com",
+      "password": "admin123",
+      "role": "admin",
+      "avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200",
+      "address": "100 Executive Way, Tech City",
+      "phone": "+1 (555) 999-0000"
+    },
+    {
+      "id": "usr_1787998979732",
+      "name": "sette",
+      "email": "yeoe@123gmail.com",
+      "password": "123",
+      "role": "user",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=200",
+      "address": "",
+      "phone": ""
+    }
+  ],
+  "categories": [
+    {
+      "id": "electronics",
+      "name": "Electronics",
+      "icon": "Cpu",
+      "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=600",
+      "description": "Next-gen gadgets, audio gear, laptops & smart wearables"
+    },
+    {
+      "id": "fashion",
+      "name": "Fashion",
+      "icon": "Shirt",
+      "image": "https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&q=80&w=600",
+      "description": "Trending apparel, streetwear, footwear & accessories"
+    },
+    {
+      "id": "home-living",
+      "name": "Home & Living",
+      "icon": "Home",
+      "image": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=600",
+      "description": "Modern decor, minimalist furniture, lighting & kitchenware"
+    },
+    {
+      "id": "beauty",
+      "name": "Beauty & Skincare",
+      "icon": "Sparkles",
+      "image": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&q=80&w=600",
+      "description": "Organic cosmetics, wellness formulas & luxury fragrances"
+    },
+    {
+      "id": "sports",
+      "name": "Sports & Fitness",
+      "icon": "Dumbbell",
+      "image": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=600",
+      "description": "Performance gear, gym equipment, activewear & outdoor"
+    },
+    {
+      "id": "books",
+      "name": "Books & Media",
+      "icon": "BookOpen",
+      "image": "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=600",
+      "description": "Bestsellers, tech guides, fiction classics & self-growth"
+    }
+  ],
+  "products": [
+    {
+      "id": "prod_1",
+      "title": "Aura Sound Pro Wireless Noise-Canceling Headphones",
+      "description": "Immerse yourself in audiophile-grade high-resolution sound with adaptive active noise cancellation, 40-hour battery life, ultra-soft memory foam earcups, and dual mic spatial audio.",
+      "price": 249.99,
+      "originalPrice": 329.99,
+      "discount": 24,
+      "rating": 4.8,
+      "reviewCount": 342,
+      "category": "electronics",
+      "brand": "AuraSound",
+      "inStock": true,
+      "stockCount": 45,
+      "isFeatured": true,
+      "isTrending": true,
+      "images": [
+        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800",
+        "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=800",
+        "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&q=80&w=800"
+      ],
+      "features": [
+        "Hybrid Active Noise Cancellation (ANC)",
+        "Bluetooth 5.3 with LDAC support",
+        "40 hours playback with Quick Charge (10 min = 5 hrs)",
+        "Premium matte finish & aluminum hinges"
+      ],
+      "tags": [
+        "audio",
+        "wireless",
+        "headphones",
+        "bluetooth"
+      ]
+    },
+    {
+      "id": "prod_2",
+      "title": "Minimalist Ceramic Smart Watch Horizon Edition",
+      "description": "Seamlessly track your heart rate, sleep metrics, workout modes, and notifications with an edge-to-edge AMOLED display encased in durable sapphire glass and lightweight ceramic body.",
+      "price": 189,
+      "originalPrice": 229,
+      "discount": 17,
+      "rating": 4.7,
+      "reviewCount": 218,
+      "category": "electronics",
+      "brand": "Horizon Tech",
+      "inStock": true,
+      "stockCount": 28,
+      "isFeatured": true,
+      "isTrending": true,
+      "images": [
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800",
+        "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&q=80&w=800"
+      ],
+      "features": [
+        "1.43-inch Always-On AMOLED Display",
+        "5 ATM Water Resistance",
+        "Continuous SpO2 & ECG monitoring",
+        "7-day active battery life"
+      ],
+      "tags": [
+        "smartwatch",
+        "wearables",
+        "fitness",
+        "tech"
+      ]
+    },
+    {
+      "id": "prod_3",
+      "title": "Urban Utility Oversized Waterproof Parka Jacket",
+      "description": "Engineered for severe elements, this breathable storm-proof jacket features sealed seams, multiple tactical utility pockets, adjustable storm hood, and thermo-regulating fleece lining.",
+      "price": 129.5,
+      "originalPrice": 175,
+      "discount": 26,
+      "rating": 4.6,
+      "reviewCount": 164,
+      "category": "fashion",
+      "brand": "Aether Studio",
+      "inStock": true,
+      "stockCount": 35,
+      "isFeatured": true,
+      "isTrending": false,
+      "images": [
+        "https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&q=80&w=800",
+        "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&q=80&w=800"
+      ],
+      "features": [
+        "Triple-layer Gore-weave waterproof shell",
+        "YKK water-resistant zippers",
+        "Inner chest pocket with RFID shielding",
+        "Reflective trim details for high visibility"
+      ],
+      "tags": [
+        "jacket",
+        "fashion",
+        "streetwear",
+        "waterproof"
+      ]
+    },
+    {
+      "id": "prod_4",
+      "title": "Scandinavian Minimalist Walnut Desk Lamp",
+      "description": "Elevate your workspace ambiance with handcrafted solid walnut wood, touch-dimmable LED lighting, warm-to-cool temperature control, and a wireless fast-charging pad integrated into the base.",
+      "price": 84.99,
+      "originalPrice": 109.99,
+      "discount": 22,
+      "rating": 4.9,
+      "reviewCount": 189,
+      "category": "home-living",
+      "brand": "Nordic Living",
+      "inStock": true,
+      "stockCount": 19,
+      "isFeatured": true,
+      "isTrending": true,
+      "images": [
+        "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&q=80&w=800",
+        "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=800"
+      ],
+      "features": [
+        "Solid FSC-certified walnut wood finish",
+        "Built-in 15W Qi wireless charger",
+        "5 color temperature modes & smooth dimming",
+        "Eye-care flicker-free soft diffusion panel"
+      ],
+      "tags": [
+        "lamp",
+        "decor",
+        "home",
+        "lighting"
+      ]
+    },
+    {
+      "id": "prod_5",
+      "title": "Luminous Botanical Radiance Facial Oil Serum",
+      "description": "Formulated with 100% cold-pressed rosehip, jojoba, and squalane oils, this restorative serum deeply hydrates, restores youthful skin barrier, and gives a natural glass-skin glow.",
+      "price": 46,
+      "originalPrice": 60,
+      "discount": 23,
+      "rating": 4.9,
+      "reviewCount": 420,
+      "category": "beauty",
+      "brand": "Botanique Labs",
+      "inStock": true,
+      "stockCount": 60,
+      "isFeatured": false,
+      "isTrending": true,
+      "images": [
+        "https://images.unsplash.com/photo-1608248597261-833258657640?auto=format&fit=crop&q=80&w=800",
+        "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&q=80&w=800"
+      ],
+      "features": [
+        "100% Organic & Vegan cruelty-free ingredients",
+        "Rich in Omega 3, 6 & 9 fatty acids",
+        "Non-comedogenic lightweight absorbs quickly",
+        "Recyclable amber glass dropper bottle"
+      ],
+      "tags": [
+        "beauty",
+        "skincare",
+        "serum",
+        "organic"
+      ]
+    },
+    {
+      "id": "prod_6",
+      "title": "Ultra-Grip Pro Ergonomic Yoga Mat & Carrying Strap",
+      "description": "Engineered with non-slip eco-friendly natural tree rubber and aligned laser guide lines for optimal positioning during yoga, pilates, and home fitness routines.",
+      "price": 58,
+      "originalPrice": 75,
+      "discount": 22,
+      "rating": 4.7,
+      "reviewCount": 112,
+      "category": "sports",
+      "brand": "Zenith Motion",
+      "inStock": true,
+      "stockCount": 40,
+      "isFeatured": false,
+      "isTrending": false,
+      "images": [
+        "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?auto=format&fit=crop&q=80&w=800",
+        "https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&q=80&w=800"
+      ],
+      "features": [
+        "6mm ultra-cushion high-density support",
+        "Laser-etched alignment system",
+        "Sweat-wicking anti-microbial surface",
+        "Includes woven cotton carry strap"
+      ],
+      "tags": [
+        "yoga",
+        "fitness",
+        "sports",
+        "mat"
+      ]
+    },
+    {
+      "id": "prod_7",
+      "title": "Designing Data-Intensive Applications Hardcover Edition",
+      "description": "The definitive comprehensive reference book for software engineers and architects building modern, reliable, scalable, and maintainable data systems.",
+      "price": 42.99,
+      "originalPrice": 54.99,
+      "discount": 21,
+      "rating": 5,
+      "reviewCount": 890,
+      "category": "books",
+      "brand": "O'Reilly Media",
+      "inStock": true,
+      "stockCount": 50,
+      "isFeatured": true,
+      "isTrending": true,
+      "images": [
+        "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=800",
+        "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=800"
+      ],
+      "features": [
+        "Explores fundamental principles of data storage & processing",
+        "Covers consensus algorithms, replication, sharding & transactions",
+        "High quality hardcover binding with acid-free paper"
+      ],
+      "tags": [
+        "books",
+        "programming",
+        "architecture",
+        "tech"
+      ]
+    },
+    {
+      "id": "prod_8",
+      "title": "Mechanical RGB Gaming Keyboard Pro Tactile Switch",
+      "description": "Unleash ultimate precision typing and gaming with custom hot-swappable switches, per-key RGB backlighting, sound-dampening foam layer, and aircraft-grade aluminum top plate.",
+      "price": 119.99,
+      "originalPrice": 149.99,
+      "discount": 20,
+      "rating": 4.8,
+      "reviewCount": 275,
+      "category": "electronics",
+      "brand": "Apex Tech",
+      "inStock": true,
+      "stockCount": 22,
+      "isFeatured": false,
+      "isTrending": true,
+      "images": [
+        "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?auto=format&fit=crop&q=80&w=800",
+        "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&q=80&w=800"
+      ],
+      "features": [
+        "Hot-swappable mechanical key sockets",
+        "Double-shot PBT keycaps resist shine",
+        "Detachable braided USB-C cable",
+        "N-key rollover & anti-ghosting"
+      ],
+      "tags": [
+        "keyboard",
+        "gaming",
+        "pc",
+        "electronics"
+      ]
+    }
+  ],
+  "reviews": [
+    {
+      "id": "rev_1",
+      "productId": "prod_1",
+      "userName": "Michael S.",
+      "userAvatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100",
+      "rating": 5,
+      "date": "2026-08-15",
+      "title": "Best noise cancellation I've ever experienced!",
+      "comment": "The soundstage is wide and punchy. Battery lasts over a week of heavy daily commute usage. Very comfortable memory foam!"
+    },
+    {
+      "id": "rev_2",
+      "productId": "prod_1",
+      "userName": "Elena R.",
+      "userAvatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100",
+      "rating": 4,
+      "date": "2026-08-20",
+      "title": "Superb build quality & fast connection",
+      "comment": "Pairing with multiple devices works seamlessly. Dark grey finish looks super sleek!"
+    }
+  ],
+  "orders": [
+    {
+      "id": "ORD-42238",
+      "userId": "usr_guest",
+      "customerName": "Alex Johnson",
+      "customerEmail": "guest@example.com",
+      "date": "2026-08-29T10:59:23.773Z",
+      "items": [
+        {
+          "productId": "prod_6",
+          "title": "Ultra-Grip Pro Ergonomic Yoga Mat & Carrying Strap",
+          "price": 58,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+          "productId": "prod_5",
+          "title": "Luminous Botanical Radiance Facial Oil Serum",
+          "price": 46,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1608248597261-833258657640?auto=format&fit=crop&q=80&w=800"
+        }
+      ],
+      "shippingAddress": {
+        "fullName": "Alex Johnson",
+        "street": "742 Evergreen Terrace",
+        "city": "Springfield",
+        "state": "IL",
+        "zipCode": "62704",
+        "phone": "+1 (555) 234-5678"
+      },
+      "paymentMethod": "Credit Card (4242)",
+      "subtotal": 104,
+      "tax": 8.32,
+      "shippingFee": 0,
+      "totalAmount": 112.32,
+      "status": "Placed",
+      "trackingNumber": "TRK299697180US",
+      "estimatedDelivery": "2026-09-02"
+    },
+    {
+      "id": "ORD-12687",
+      "userId": "usr_1787998979732",
+      "customerName": "sette",
+      "customerEmail": "yeoe@123gmail.com",
+      "date": "2026-08-29T10:25:07.161Z",
+      "items": [
+        {
+          "productId": "prod_1",
+          "title": "Aura Sound Pro Wireless Noise-Canceling Headphones",
+          "price": 249.99,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+          "productId": "prod_2",
+          "title": "Minimalist Ceramic Smart Watch Horizon Edition",
+          "price": 189,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800"
+        }
+      ],
+      "shippingAddress": {
+        "fullName": "sette",
+        "street": "742 Evergreen Terrace",
+        "city": "Springfield",
+        "state": "IL",
+        "zipCode": "62704",
+        "phone": "+1 (555) 234-5678"
+      },
+      "paymentMethod": "Credit Card (4242)",
+      "subtotal": 438.99,
+      "tax": 35.1192,
+      "shippingFee": 0,
+      "totalAmount": 474.1092,
+      "status": "Placed",
+      "trackingNumber": "TRK784110640US",
+      "estimatedDelivery": "2026-09-02"
+    },
+    {
+      "id": "ORD-98241",
+      "userId": "usr_1",
+      "customerName": "Alex Johnson",
+      "customerEmail": "user@example.com",
+      "date": "2026-08-28T14:30:00Z",
+      "items": [
+        {
+          "productId": "prod_1",
+          "title": "Aura Sound Pro Wireless Headphones",
+          "price": 249.99,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800"
+        }
+      ],
+      "shippingAddress": {
+        "fullName": "Alex Johnson",
+        "street": "742 Evergreen Terrace",
+        "city": "Springfield",
+        "state": "IL",
+        "zipCode": "62704",
+        "phone": "+1 (555) 234-5678"
+      },
+      "paymentMethod": "Credit Card (ending 4242)",
+      "totalAmount": 269.99,
+      "subtotal": 249.99,
+      "tax": 20,
+      "shippingFee": 0,
+      "status": "Shipped",
+      "trackingNumber": "TRK883920194US",
+      "estimatedDelivery": "2026-09-01"
+    }
+  ]
+}

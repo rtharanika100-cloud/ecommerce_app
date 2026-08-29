@@ -1,3 +1,4 @@
+const { useState } = React;
 import { useCart } from '../context/CartContext.jsx';
 import { formatINR } from '../utils/formatters.js';
 
@@ -13,8 +14,12 @@ export function CartPage({ onNavigate }) {
     total,
     updateQuantity,
     removeFromCart,
-    clearCart
+    clearCart,
+    applyCoupon,
+    removeCoupon
   } = useCart();
+
+  const [couponInput, setCouponInput] = useState('');
 
   if (cartItems.length === 0) {
     return (
@@ -31,6 +36,14 @@ export function CartPage({ onNavigate }) {
       </div>
     );
   }
+
+  const handleCouponSubmit = (e) => {
+    e.preventDefault();
+    if (couponInput) {
+      applyCoupon(couponInput);
+      setCouponInput('');
+    }
+  };
 
   return (
     <div className="max-w-6xl mx-auto py-6 space-y-8 pb-16">
@@ -115,6 +128,30 @@ export function CartPage({ onNavigate }) {
             Order Total Summary
           </h3>
 
+          {/* Coupon Form */}
+          {coupon ? (
+            <div className="flex items-center justify-between p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-xs text-emerald-600 dark:text-emerald-400 font-semibold">
+              <span>Code <strong>{coupon.code}</strong> ({coupon.discountPercent}% OFF)</span>
+              <button onClick={removeCoupon} className="text-xs hover:underline">Remove</button>
+            </div>
+          ) : (
+            <form onSubmit={handleCouponSubmit} className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Coupon code (Try DIWALI20)..."
+                value={couponInput}
+                onChange={(e) => setCouponInput(e.target.value)}
+                className="flex-1 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs uppercase font-medium focus:outline-none focus:border-brand-500"
+              />
+              <button
+                type="submit"
+                className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold"
+              >
+                Apply
+              </button>
+            </form>
+          )}
+
           <div className="space-y-2 text-xs text-slate-600 dark:text-slate-400">
             <div className="flex justify-between">
               <span>Subtotal</span>
@@ -132,8 +169,12 @@ export function CartPage({ onNavigate }) {
                 {shippingFee === 0 ? 'FREE' : formatINR(shippingFee)}
               </span>
             </div>
+            <div className="flex justify-between">
+              <span>GST Simulation (18%)</span>
+              <span className="font-medium text-slate-900 dark:text-white">{formatINR(tax)}</span>
+            </div>
             <div className="flex justify-between text-base font-bold text-slate-900 dark:text-white pt-3 border-t border-slate-200 dark:border-slate-800">
-              <span>Total Price</span>
+              <span>Total Payable</span>
               <span className="text-brand-600 dark:text-brand-400">{formatINR(total)}</span>
             </div>
           </div>

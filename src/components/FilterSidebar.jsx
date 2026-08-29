@@ -1,3 +1,5 @@
+import { formatINR } from '../utils/formatters.js';
+
 export function FilterSidebar({
   categories = [],
   selectedCategory,
@@ -78,28 +80,28 @@ export function FilterSidebar({
         </div>
       </div>
 
-      {/* Price Range Slider */}
+      {/* Price Range Slider in INR */}
       <div className="space-y-2">
         <div className="flex items-center justify-between text-xs">
           <label className="font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
             Max Price
           </label>
           <span className="font-bold text-brand-600 dark:text-brand-400">
-            ${priceRange}
+            {formatINR(priceRange)}
           </span>
         </div>
         <input
           type="range"
-          min="10"
-          max="500"
-          step="10"
+          min="500"
+          max="50000"
+          step="500"
           value={priceRange}
           onChange={(e) => setPriceRange(Number(e.target.value))}
           className="w-full accent-brand-600 cursor-pointer"
         />
         <div className="flex justify-between text-[10px] text-slate-400 font-medium">
-          <span>$10</span>
-          <span>$500+</span>
+          <span>₹500</span>
+          <span>₹50,000+</span>
         </div>
       </div>
 

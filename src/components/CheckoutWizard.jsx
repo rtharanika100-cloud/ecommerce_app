@@ -2,6 +2,7 @@ const { useState } = React;
 import { useCart } from '../context/CartContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useToast } from '../context/ToastContext.jsx';
+import { formatINR } from '../utils/formatters.js';
 import { api } from '../services/api.js';
 
 export function CheckoutWizard({ onNavigate }) {
@@ -13,28 +14,28 @@ export function CheckoutWizard({ onNavigate }) {
   const [loading, setLoading] = useState(false);
   const [createdOrder, setCreatedOrder] = useState(null);
 
-  // Form State
+  // Indian Shipping Address State
   const [shippingAddress, setShippingAddress] = useState({
-    fullName: user ? user.name : 'Alex Johnson',
-    street: user && user.address ? user.address : '742 Evergreen Terrace',
-    city: 'Springfield',
-    state: 'IL',
-    zipCode: '62704',
-    phone: user && user.phone ? user.phone : '+1 (555) 234-5678'
+    fullName: user ? user.name : 'Aarav Sharma',
+    street: user && user.address ? user.address : 'Flat 402, Sunshine Apartments, MG Road',
+    city: 'Bengaluru',
+    state: 'Karnataka',
+    pincode: user && user.pincode ? user.pincode : '560038',
+    phone: user && user.phone ? user.phone : '+91 98765 43210'
   });
 
-  const [paymentMethod, setPaymentMethod] = useState('Credit Card');
-  const [cardDetails, setCardDetails] = useState({
-    cardNumber: '•••• •••• •••• 4242',
-    expDate: '12/28',
-    cvv: '123'
-  });
+  const [paymentMethod, setPaymentMethod] = useState('UPI (Google Pay / PhonePe)');
+  const [upiId, setUpiId] = useState('aarav@okaxis');
 
   const handleNext = (e) => {
     e.preventDefault();
     if (step === 1) {
-      if (!shippingAddress.fullName || !shippingAddress.street || !shippingAddress.city) {
+      if (!shippingAddress.fullName || !shippingAddress.street || !shippingAddress.city || !shippingAddress.pincode) {
         addToast('Please fill out all required shipping fields', 'error');
+        return;
+      }
+      if (!/^\d{6}$/.test(shippingAddress.pincode.trim())) {
+        addToast('Please enter a valid 6-digit Indian Pincode (e.g. 560038)', 'error');
         return;
       }
       setStep(2);
@@ -49,7 +50,7 @@ export function CheckoutWizard({ onNavigate }) {
       const orderPayload = {
         userId: user ? user.id : 'usr_guest',
         customerName: shippingAddress.fullName,
-        customerEmail: user ? user.email : 'guest@example.com',
+        customerEmail: user ? user.email : 'customer@example.com',
         items: cartItems.map(item => ({
           productId: item.product.id,
           title: item.product.title,
@@ -58,7 +59,7 @@ export function CheckoutWizard({ onNavigate }) {
           image: item.product.images[0]
         })),
         shippingAddress,
-        paymentMethod: paymentMethod === 'Credit Card' ? `Credit Card (${cardDetails.cardNumber.slice(-4)})` : paymentMethod,
+        paymentMethod: paymentMethod.includes('UPI') ? `UPI (${upiId})` : paymentMethod,
         subtotal,
         tax,
         shippingFee,
@@ -89,7 +90,7 @@ export function CheckoutWizard({ onNavigate }) {
           Order Placed Successfully!
         </h2>
         <p className="text-xs text-slate-500 max-w-sm mx-auto">
-          Thank you for shopping with AURA. Your order confirmation and digital invoice have been dispatched to your email.
+          Thank you for shopping on AURA India. Order confirmation and GST tax invoice have been sent to your email.
         </p>
 
         <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-left text-xs space-y-2">
@@ -98,7 +99,7 @@ export function CheckoutWizard({ onNavigate }) {
             <span className="text-brand-600 dark:text-brand-400">{createdOrder.id}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-500">Tracking Number:</span>
+            <span className="text-slate-500">Tracking AWB:</span>
             <span className="font-mono text-slate-800 dark:text-slate-200">{createdOrder.trackingNumber}</span>
           </div>
           <div className="flex justify-between">
@@ -106,8 +107,8 @@ export function CheckoutWizard({ onNavigate }) {
             <span className="font-semibold text-emerald-500">{createdOrder.estimatedDelivery}</span>
           </div>
           <div className="flex justify-between font-bold pt-2 border-t border-slate-200 dark:border-slate-700">
-            <span>Total Paid:</span>
-            <span className="text-slate-900 dark:text-white">${createdOrder.totalAmount.toFixed(2)}</span>
+            <span>Total Amount Paid:</span>
+            <span className="text-slate-900 dark:text-white">{formatINR(createdOrder.totalAmount)}</span>
           </div>
         </div>
 
@@ -135,9 +136,9 @@ export function CheckoutWizard({ onNavigate }) {
       {/* Wizard Progress Bar */}
       <div className="flex items-center justify-between max-w-lg mx-auto">
         {[
-          { num: 1, title: 'Shipping' },
-          { num: 2, title: 'Payment' },
-          { num: 3, title: 'Review' }
+          { num: 1, title: 'Indian Address' },
+          { num: 2, title: 'UPI / Payment' },
+          { num: 3, title: 'Review Order' }
         ].map((s) => (
           <div key={s.num} className="flex items-center gap-2">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${
@@ -163,11 +164,11 @@ export function CheckoutWizard({ onNavigate }) {
           {step === 1 && (
             <form onSubmit={handleNext} className="space-y-4">
               <h3 className="font-display font-bold text-lg text-slate-900 dark:text-white mb-4">
-                1. Shipping Address
+                1. Shipping Address (India)
               </h3>
 
               <div>
-                <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Full Name</label>
+                <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Full Name *</label>
                 <input
                   type="text"
                   required
@@ -178,7 +179,7 @@ export function CheckoutWizard({ onNavigate }) {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Street Address</label>
+                <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Flat, House No., Building, Street Address *</label>
                 <input
                   type="text"
                   required
@@ -188,37 +189,49 @@ export function CheckoutWizard({ onNavigate }) {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400">City</label>
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400">City / Town *</label>
                   <input
                     type="text"
                     required
                     value={shippingAddress.city}
                     onChange={(e) => setShippingAddress({ ...shippingAddress, city: e.target.value })}
-                    className="w-full mt-1 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+                    className="w-full mt-1 px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Postal / Zip Code</label>
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400">State *</label>
                   <input
                     type="text"
                     required
-                    value={shippingAddress.zipCode}
-                    onChange={(e) => setShippingAddress({ ...shippingAddress, zipCode: e.target.value })}
-                    className="w-full mt-1 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+                    value={shippingAddress.state}
+                    onChange={(e) => setShippingAddress({ ...shippingAddress, state: e.target.value })}
+                    className="w-full mt-1 px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Pincode (6 digits) *</label>
+                  <input
+                    type="text"
+                    required
+                    maxLength="6"
+                    placeholder="560038"
+                    value={shippingAddress.pincode}
+                    onChange={(e) => setShippingAddress({ ...shippingAddress, pincode: e.target.value })}
+                    className="w-full mt-1 px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Phone Number</label>
+                <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Mobile Number (10 digits) *</label>
                 <input
                   type="text"
                   required
                   value={shippingAddress.phone}
                   onChange={(e) => setShippingAddress({ ...shippingAddress, phone: e.target.value })}
-                  className="w-full mt-1 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full mt-1 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
                 />
               </div>
 
@@ -234,11 +247,16 @@ export function CheckoutWizard({ onNavigate }) {
           {step === 2 && (
             <form onSubmit={handleNext} className="space-y-4">
               <h3 className="font-display font-bold text-lg text-slate-900 dark:text-white mb-4">
-                2. Payment Method
+                2. Indian Payment Options
               </h3>
 
               <div className="grid grid-cols-2 gap-3">
-                {['Credit Card', 'UPI Instant', 'Net Banking', 'Cash on Delivery'].map((m) => (
+                {[
+                  'UPI (Google Pay / PhonePe / Paytm)',
+                  'Cash on Delivery (COD)',
+                  'Debit / Credit Card',
+                  'Net Banking'
+                ].map((m) => (
                   <button
                     key={m}
                     type="button"
@@ -255,37 +273,17 @@ export function CheckoutWizard({ onNavigate }) {
                 ))}
               </div>
 
-              {paymentMethod === 'Credit Card' && (
-                <div className="space-y-3 pt-3">
-                  <div>
-                    <label className="text-xs font-bold text-slate-500">Card Number</label>
-                    <input
-                      type="text"
-                      value={cardDetails.cardNumber}
-                      onChange={(e) => setCardDetails({ ...cardDetails, cardNumber: e.target.value })}
-                      className="w-full mt-1 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-xs font-bold text-slate-500">Exp Date</label>
-                      <input
-                        type="text"
-                        value={cardDetails.expDate}
-                        onChange={(e) => setCardDetails({ ...cardDetails, expDate: e.target.value })}
-                        className="w-full mt-1 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-xs font-bold text-slate-500">CVV</label>
-                      <input
-                        type="password"
-                        value={cardDetails.cvv}
-                        onChange={(e) => setCardDetails({ ...cardDetails, cvv: e.target.value })}
-                        className="w-full mt-1 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
-                      />
-                    </div>
-                  </div>
+              {paymentMethod.includes('UPI') && (
+                <div className="space-y-3 pt-3 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Virtual Payment Address (VPA / UPI ID)</label>
+                  <input
+                    type="text"
+                    value={upiId}
+                    onChange={(e) => setUpiId(e.target.value)}
+                    placeholder="yourname@okaxis or mobile@paytm"
+                    className="w-full mt-1 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs font-mono text-slate-900 dark:text-white"
+                  />
+                  <p className="text-[11px] text-slate-500">Pay via Google Pay, PhonePe, Paytm, or BHIM UPI.</p>
                 </div>
               )}
 
@@ -314,10 +312,10 @@ export function CheckoutWizard({ onNavigate }) {
               </h3>
 
               <div className="space-y-3">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">Shipping To</h4>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">Delivery Address</h4>
                 <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs space-y-1">
                   <p className="font-bold text-slate-900 dark:text-white">{shippingAddress.fullName}</p>
-                  <p className="text-slate-600 dark:text-slate-300">{shippingAddress.street}, {shippingAddress.city}, {shippingAddress.zipCode}</p>
+                  <p className="text-slate-600 dark:text-slate-300">{shippingAddress.street}, {shippingAddress.city}, {shippingAddress.state} - {shippingAddress.pincode}</p>
                   <p className="text-slate-500">{shippingAddress.phone}</p>
                 </div>
               </div>
@@ -326,12 +324,12 @@ export function CheckoutWizard({ onNavigate }) {
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">Items in Order</h4>
                 <div className="space-y-2">
                   {cartItems.map(({ product, quantity }) => (
-                    <div key={product.id} className="flex items-center justify-between text-xs p-2 rounded-xl bg-slate-50 dark:bg-slate-800/40">
+                    <div key={product.id} className="flex items-center justify-between text-xs p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/40">
                       <span className="font-medium text-slate-800 dark:text-slate-200 truncate max-w-xs">
                         {quantity}x {product.title}
                       </span>
                       <span className="font-bold text-slate-900 dark:text-white">
-                        ${(product.price * quantity).toFixed(2)}
+                        {formatINR(product.price * quantity)}
                       </span>
                     </div>
                   ))}
@@ -351,7 +349,7 @@ export function CheckoutWizard({ onNavigate }) {
                   disabled={loading}
                   className="flex-1 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-xl transition-all disabled:opacity-50"
                 >
-                  {loading ? 'Processing Payment...' : `Confirm & Pay $${total.toFixed(2)}`}
+                  {loading ? 'Processing Payment...' : `Confirm & Pay ${formatINR(total)}`}
                 </button>
               </div>
             </div>
@@ -368,27 +366,23 @@ export function CheckoutWizard({ onNavigate }) {
           <div className="space-y-2 text-xs text-slate-600 dark:text-slate-400">
             <div className="flex justify-between">
               <span>Items Subtotal</span>
-              <span className="font-medium text-slate-900 dark:text-white">${subtotal.toFixed(2)}</span>
+              <span className="font-medium text-slate-900 dark:text-white">{formatINR(subtotal)}</span>
             </div>
             <div className="flex justify-between">
-              <span>Shipping Fee</span>
+              <span>Delivery Charges</span>
               <span className="font-medium text-slate-900 dark:text-white">
-                {shippingFee === 0 ? 'FREE' : `$${shippingFee.toFixed(2)}`}
+                {shippingFee === 0 ? 'FREE' : formatINR(shippingFee)}
               </span>
             </div>
-            <div className="flex justify-between">
-              <span>Estimated Tax (8%)</span>
-              <span className="font-medium text-slate-900 dark:text-white">${tax.toFixed(2)}</span>
-            </div>
             <div className="flex justify-between text-base font-bold text-slate-900 dark:text-white pt-3 border-t border-slate-200 dark:border-slate-800">
-              <span>Total Due</span>
-              <span className="text-brand-600 dark:text-brand-400">${total.toFixed(2)}</span>
+              <span>Total Payable</span>
+              <span className="text-brand-600 dark:text-brand-400">{formatINR(total)}</span>
             </div>
           </div>
 
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-[11px] text-slate-500 space-y-1">
-            <p>✓ 256-Bit SSL Encrypted Payment</p>
-            <p>✓ 30-Day Money-Back Guarantee</p>
+            <p>✓ 100% Buyer Protection</p>
+            <p>✓ GST Invoice Included</p>
           </div>
         </div>
 

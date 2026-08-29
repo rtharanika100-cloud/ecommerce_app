@@ -1,6 +1,7 @@
 const { useState, useEffect } = React;
 import { useCart } from '../context/CartContext.jsx';
 import { useWishlist } from '../context/WishlistContext.jsx';
+import { formatINR } from '../utils/formatters.js';
 import { ReviewSection } from '../components/ReviewSection.jsx';
 import { ProductCard } from '../components/ProductCard.jsx';
 import { api } from '../services/api.js';
@@ -21,7 +22,6 @@ export function ProductDetailPage({ productId, onSelectProduct, onNavigate }) {
       const res = await api.getProductById(productId);
       if (res.success) {
         setProduct(res.data);
-        // Load related category products
         const relRes = await api.getProducts({ category: res.data.category });
         if (relRes.success) {
           setRelatedProducts(relRes.data.filter(p => p.id !== productId).slice(0, 4));
@@ -88,7 +88,7 @@ export function ProductDetailPage({ productId, onSelectProduct, onNavigate }) {
             />
             {discount > 0 && (
               <span className="absolute top-4 left-4 px-3 py-1.5 rounded-xl bg-rose-500 text-white font-black text-xs shadow-lg">
-                -{discount}% DISCOUNT
+                -{discount}% SPECIAL DISCOUNT
               </span>
             )}
           </div>
@@ -137,19 +137,19 @@ export function ProductDetailPage({ productId, onSelectProduct, onNavigate }) {
             </div>
           </div>
 
-          {/* Pricing Box */}
+          {/* Pricing Box in INR */}
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 flex items-baseline gap-3">
             <span className="font-display font-black text-3xl text-slate-900 dark:text-white">
-              ${product.price ? product.price.toFixed(2) : '0.00'}
+              {formatINR(product.price)}
             </span>
             {product.originalPrice && product.originalPrice > product.price && (
               <span className="text-base text-slate-400 line-through font-light">
-                ${product.originalPrice.toFixed(2)}
+                {formatINR(product.originalPrice)}
               </span>
             )}
             {discount > 0 && (
               <span className="text-xs font-bold text-rose-500 ml-auto">
-                You Save ${(product.originalPrice - product.price).toFixed(2)}
+                You Save {formatINR(product.originalPrice - product.price)}
               </span>
             )}
           </div>

@@ -1,6 +1,18 @@
 // AURA E-Commerce Bundled Application
 const { useState, useEffect, useRef, useMemo, useCallback, useContext, createContext } = React;
 
+/* --- File: src/utils/formatters.js --- */
+/**
+ * Formats a numeric value into Indian Rupee currency format (₹).
+ * Example: 1999 -> "₹1,999", 105000 -> "₹1,05,000"
+ */
+function formatINR(amount) {
+  if (amount === undefined || amount === null || isNaN(amount)) return '₹0';
+  const num = Math.round(Number(amount));
+  return '₹' + num.toLocaleString('en-IN');
+}
+
+
 /* --- File: src/services/api.js --- */
 const API_BASE = '/api';
 
@@ -289,7 +301,7 @@ function CartProvider({ children }) {
   });
 
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [coupon, setCoupon] = useState(null); // { code, discountPercent }
+  const [coupon, setCoupon] = useState(null);
   const { addToast } = useToast();
 
   useEffect(() => {
@@ -339,16 +351,16 @@ function CartProvider({ children }) {
 
   const applyCoupon = (code) => {
     const cleanCode = code.trim().toUpperCase();
-    if (cleanCode === 'AURA20' || cleanCode === 'PROMO20') {
+    if (cleanCode === 'DIWALI20' || cleanCode === 'AURA20') {
       setCoupon({ code: cleanCode, discountPercent: 20 });
-      if (addToast) addToast('Coupon code applied: 20% OFF!', 'success');
+      if (addToast) addToast('Diwali Special Coupon Applied: 20% OFF!', 'success');
       return true;
-    } else if (cleanCode === 'WELCOME10') {
+    } else if (cleanCode === 'FREESHIP') {
       setCoupon({ code: cleanCode, discountPercent: 10 });
-      if (addToast) addToast('Coupon code applied: 10% OFF!', 'success');
+      if (addToast) addToast('Coupon Applied: 10% OFF!', 'success');
       return true;
     } else {
-      if (addToast) addToast('Invalid promo code. Try "AURA20"', 'error');
+      if (addToast) addToast('Invalid coupon. Try "DIWALI20"', 'error');
       return false;
     }
   };
@@ -365,18 +377,13 @@ function CartProvider({ children }) {
     0
   );
 
-  const rawSavings = cartItems.reduce(
-    (sum, item) =>
-      sum + ((item.product.originalPrice || item.product.price) - item.product.price) * item.quantity,
-    0
-  );
-
   const couponDiscount = coupon ? (subtotal * coupon.discountPercent) / 100 : 0;
   const subtotalAfterCoupon = Math.max(0, subtotal - couponDiscount);
 
-  const shippingFee = subtotalAfterCoupon > 100 || cartItems.length === 0 ? 0 : 9.99;
-  const tax = subtotalAfterCoupon * 0.08; // 8% estimated sales tax
-  const total = subtotalAfterCoupon + shippingFee + tax;
+  // Delivery Charges: Free over ₹499 else ₹50
+  const shippingFee = subtotalAfterCoupon >= 499 || cartItems.length === 0 ? 0 : 50;
+  const tax = subtotalAfterCoupon * 0.18; // 18% GST simulation
+  const total = subtotalAfterCoupon + shippingFee;
 
   return (
     <CartContext.Provider
@@ -384,7 +391,6 @@ function CartProvider({ children }) {
         cartItems,
         cartCount,
         subtotal,
-        rawSavings,
         coupon,
         couponDiscount,
         shippingFee,
@@ -993,36 +999,36 @@ function Footer({ onNavigate }) {
 const BANNERS = [
   {
     id: 1,
-    title: "Revolutionize Your Audio Experience",
-    subtitle: "NEXT-GEN NOISE CANCELLATION",
-    description: "Immerse yourself in audiophile sound dynamics with the newly released AuraSound Pro Wireless Headphones.",
-    buttonText: "Shop Audio Deals",
+    title: "Diwali Mega Sale 🪔 Up to 80% OFF",
+    subtitle: "THE GREAT INDIAN FESTIVAL",
+    description: "Celebrate Diwali with unbelievable discounts on Audiophile Noise-Canceling Headphones, Smartwatches, and Mobiles.",
+    buttonText: "Shop Diwali Deals",
     category: "electronics",
-    badge: "24% OFF THIS WEEK",
+    badge: "BIG BILLION DEALS",
     image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1200",
-    gradient: "from-indigo-900/90 via-slate-900/80 to-transparent"
-  },
-  {
-    id: 2,
-    title: "Scandinavian Minimalist Home Essentials",
-    subtitle: "MODERN LIVING COLLECTION",
-    description: "Transform your living space with solid walnut lamps, ceramic decor, and sustainable handcrafted furniture.",
-    buttonText: "Explore Home Decor",
-    category: "home-living",
-    badge: "NEW ARRIVALS",
-    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=1200",
     gradient: "from-amber-950/90 via-slate-900/80 to-transparent"
   },
   {
-    id: 3,
-    title: "Urban Tactical & Weatherproof Streetwear",
-    subtitle: "AETHER STUDIO FASHION",
-    description: "Breathable storm-proof parkas, utility coats, and sleek footwear built for modern outdoor aesthetics.",
-    buttonText: "Discover Fashion",
+    id: 2,
+    title: "Traditional Ethnic Wear & Festive Festive Fashion",
+    subtitle: "INDIAN ETHNIC THREADS",
+    description: "Handcrafted Lucknowi Chikankari Kurta sets, Sarees, and designer festive ethnic fashion starting at just ₹999.",
+    buttonText: "Explore Ethnic Wear",
     category: "fashion",
-    badge: "TRENDING NOW",
+    badge: "FLAT 50% OFF",
     image: "https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&q=80&w=1200",
-    gradient: "from-slate-950/90 via-slate-900/80 to-transparent"
+    gradient: "from-rose-950/90 via-slate-900/80 to-transparent"
+  },
+  {
+    id: 3,
+    title: "Upgrade Your Home & Kitchen Setup",
+    subtitle: "FESTIVE HOME DECOR",
+    description: "Solid walnut lamps, brass diyas, designer bedsheets, and stainless cookware deals under ₹1,999.",
+    buttonText: "Shop Home Decor",
+    category: "home-living",
+    badge: "FESTIVE SPECIAL",
+    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=1200",
+    gradient: "from-indigo-950/90 via-slate-900/80 to-transparent"
   }
 ];
 
@@ -1054,7 +1060,7 @@ function HeroCarousel({ onSelectCategory, onNavigate }) {
         {/* Content Container */}
         <div className="relative z-10 h-full max-w-7xl mx-auto px-6 sm:px-12 flex flex-col justify-center max-w-2xl text-white">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-500/30 backdrop-blur-md border border-brand-400/40 text-brand-300 text-xs font-bold w-fit mb-4">
-            <span>🔥</span>
+            <span>🪔</span>
             <span>{slide.badge}</span>
           </div>
 
@@ -1120,6 +1126,7 @@ function HeroCarousel({ onSelectCategory, onNavigate }) {
 /* --- File: src/components/ProductCard.jsx --- */
 
 
+
 function ProductCard({ product, onSelectProduct, viewMode = 'grid' }) {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
@@ -1143,7 +1150,7 @@ function ProductCard({ product, onSelectProduct, viewMode = 'grid' }) {
           />
           {discount > 0 && (
             <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-rose-500 text-white text-[10px] font-extrabold">
-              -{discount}%
+              -{discount}% OFF
             </span>
           )}
         </div>
@@ -1175,11 +1182,11 @@ function ProductCard({ product, onSelectProduct, viewMode = 'grid' }) {
           <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
             <div className="flex items-baseline gap-2">
               <span className="font-display font-black text-xl text-slate-900 dark:text-white">
-                ${product.price ? product.price.toFixed(2) : '0.00'}
+                {formatINR(product.price)}
               </span>
               {product.originalPrice && product.originalPrice > product.price && (
                 <span className="text-xs text-slate-400 line-through">
-                  ${product.originalPrice.toFixed(2)}
+                  {formatINR(product.originalPrice)}
                 </span>
               )}
             </div>
@@ -1228,12 +1235,12 @@ function ProductCard({ product, onSelectProduct, viewMode = 'grid' }) {
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
           {discount > 0 && (
             <span className="px-2.5 py-1 rounded-lg bg-rose-500 text-white text-[11px] font-extrabold tracking-wide shadow-md">
-              -{discount}%
+              -{discount}% OFF
             </span>
           )}
           {product.isFeatured && (
             <span className="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 text-[10px] font-bold tracking-wider uppercase shadow-md">
-              FEATURED
+              FESTIVE DEAL
             </span>
           )}
         </div>
@@ -1288,11 +1295,11 @@ function ProductCard({ product, onSelectProduct, viewMode = 'grid' }) {
           <div>
             <div className="flex items-baseline gap-1.5">
               <span className="font-display font-extrabold text-base text-slate-900 dark:text-white">
-                ${product.price ? product.price.toFixed(2) : '0.00'}
+                {formatINR(product.price)}
               </span>
               {product.originalPrice && product.originalPrice > product.price && (
                 <span className="text-xs text-slate-400 line-through font-light">
-                  ${product.originalPrice.toFixed(2)}
+                  {formatINR(product.originalPrice)}
                 </span>
               )}
             </div>
@@ -1315,6 +1322,7 @@ function ProductCard({ product, onSelectProduct, viewMode = 'grid' }) {
 
 
 /* --- File: src/components/FilterSidebar.jsx --- */
+
 function FilterSidebar({
   categories = [],
   selectedCategory,
@@ -1395,28 +1403,28 @@ function FilterSidebar({
         </div>
       </div>
 
-      {/* Price Range Slider */}
+      {/* Price Range Slider in INR */}
       <div className="space-y-2">
         <div className="flex items-center justify-between text-xs">
           <label className="font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
             Max Price
           </label>
           <span className="font-bold text-brand-600 dark:text-brand-400">
-            ${priceRange}
+            {formatINR(priceRange)}
           </span>
         </div>
         <input
           type="range"
-          min="10"
-          max="500"
-          step="10"
+          min="500"
+          max="50000"
+          step="500"
           value={priceRange}
           onChange={(e) => setPriceRange(Number(e.target.value))}
           className="w-full accent-brand-600 cursor-pointer"
         />
         <div className="flex justify-between text-[10px] text-slate-400 font-medium">
-          <span>$10</span>
-          <span>$500+</span>
+          <span>₹500</span>
+          <span>₹50,000+</span>
         </div>
       </div>
 
@@ -1530,7 +1538,7 @@ function CartDrawer({ onNavigate }) {
                 </div>
                 <h3 className="font-display font-bold text-lg">Your bag is empty</h3>
                 <p className="text-xs text-slate-500 max-w-xs">
-                  Looks like you haven't added any products to your cart yet.
+                  Explore festive deals and add products to your cart.
                 </p>
                 <button
                   onClick={() => {
@@ -1588,7 +1596,7 @@ function CartDrawer({ onNavigate }) {
                       </div>
 
                       <span className="font-display font-extrabold text-xs text-brand-600 dark:text-brand-400">
-                        ${(product.price * quantity).toFixed(2)}
+                        {formatINR(product.price * quantity)}
                       </span>
                     </div>
                   </div>
@@ -1611,7 +1619,7 @@ function CartDrawer({ onNavigate }) {
                 <form onSubmit={handleCouponSubmit} className="flex gap-2">
                   <input
                     type="text"
-                    placeholder="Coupon code (Try AURA20)..."
+                    placeholder="Coupon code (Try DIWALI20)..."
                     value={couponCodeInput}
                     onChange={(e) => setCouponCodeInput(e.target.value)}
                     className="flex-1 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs uppercase font-medium focus:outline-none focus:border-brand-500"
@@ -1629,27 +1637,23 @@ function CartDrawer({ onNavigate }) {
               <div className="space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-medium text-slate-900 dark:text-white">${subtotal.toFixed(2)}</span>
+                  <span className="font-medium text-slate-900 dark:text-white">{formatINR(subtotal)}</span>
                 </div>
                 {couponDiscount > 0 && (
                   <div className="flex justify-between text-emerald-500 font-semibold">
                     <span>Discount</span>
-                    <span>-${couponDiscount.toFixed(2)}</span>
+                    <span>-{formatINR(couponDiscount)}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <span>Estimated Shipping</span>
+                  <span>Delivery Charges</span>
                   <span className="font-medium text-slate-900 dark:text-white">
-                    {shippingFee === 0 ? 'FREE' : `$${shippingFee.toFixed(2)}`}
+                    {shippingFee === 0 ? 'FREE' : formatINR(shippingFee)}
                   </span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Tax (8%)</span>
-                  <span className="font-medium text-slate-900 dark:text-white">${tax.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm font-bold text-slate-900 dark:text-white pt-2 border-t border-slate-200 dark:border-slate-800">
                   <span>Estimated Total</span>
-                  <span className="text-brand-600 dark:text-brand-400">${total.toFixed(2)}</span>
+                  <span className="text-brand-600 dark:text-brand-400">{formatINR(total)}</span>
                 </div>
               </div>
 
@@ -1852,28 +1856,28 @@ function CheckoutWizard({ onNavigate }) {
   const [loading, setLoading] = useState(false);
   const [createdOrder, setCreatedOrder] = useState(null);
 
-  // Form State
+  // Indian Shipping Address State
   const [shippingAddress, setShippingAddress] = useState({
-    fullName: user ? user.name : 'Alex Johnson',
-    street: user && user.address ? user.address : '742 Evergreen Terrace',
-    city: 'Springfield',
-    state: 'IL',
-    zipCode: '62704',
-    phone: user && user.phone ? user.phone : '+1 (555) 234-5678'
+    fullName: user ? user.name : 'Aarav Sharma',
+    street: user && user.address ? user.address : 'Flat 402, Sunshine Apartments, MG Road',
+    city: 'Bengaluru',
+    state: 'Karnataka',
+    pincode: user && user.pincode ? user.pincode : '560038',
+    phone: user && user.phone ? user.phone : '+91 98765 43210'
   });
 
-  const [paymentMethod, setPaymentMethod] = useState('Credit Card');
-  const [cardDetails, setCardDetails] = useState({
-    cardNumber: '•••• •••• •••• 4242',
-    expDate: '12/28',
-    cvv: '123'
-  });
+  const [paymentMethod, setPaymentMethod] = useState('UPI (Google Pay / PhonePe)');
+  const [upiId, setUpiId] = useState('aarav@okaxis');
 
   const handleNext = (e) => {
     e.preventDefault();
     if (step === 1) {
-      if (!shippingAddress.fullName || !shippingAddress.street || !shippingAddress.city) {
+      if (!shippingAddress.fullName || !shippingAddress.street || !shippingAddress.city || !shippingAddress.pincode) {
         addToast('Please fill out all required shipping fields', 'error');
+        return;
+      }
+      if (!/^\d{6}$/.test(shippingAddress.pincode.trim())) {
+        addToast('Please enter a valid 6-digit Indian Pincode (e.g. 560038)', 'error');
         return;
       }
       setStep(2);
@@ -1888,7 +1892,7 @@ function CheckoutWizard({ onNavigate }) {
       const orderPayload = {
         userId: user ? user.id : 'usr_guest',
         customerName: shippingAddress.fullName,
-        customerEmail: user ? user.email : 'guest@example.com',
+        customerEmail: user ? user.email : 'customer@example.com',
         items: cartItems.map(item => ({
           productId: item.product.id,
           title: item.product.title,
@@ -1897,7 +1901,7 @@ function CheckoutWizard({ onNavigate }) {
           image: item.product.images[0]
         })),
         shippingAddress,
-        paymentMethod: paymentMethod === 'Credit Card' ? `Credit Card (${cardDetails.cardNumber.slice(-4)})` : paymentMethod,
+        paymentMethod: paymentMethod.includes('UPI') ? `UPI (${upiId})` : paymentMethod,
         subtotal,
         tax,
         shippingFee,
@@ -1928,7 +1932,7 @@ function CheckoutWizard({ onNavigate }) {
           Order Placed Successfully!
         </h2>
         <p className="text-xs text-slate-500 max-w-sm mx-auto">
-          Thank you for shopping with AURA. Your order confirmation and digital invoice have been dispatched to your email.
+          Thank you for shopping on AURA India. Order confirmation and GST tax invoice have been sent to your email.
         </p>
 
         <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-left text-xs space-y-2">
@@ -1937,7 +1941,7 @@ function CheckoutWizard({ onNavigate }) {
             <span className="text-brand-600 dark:text-brand-400">{createdOrder.id}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-500">Tracking Number:</span>
+            <span className="text-slate-500">Tracking AWB:</span>
             <span className="font-mono text-slate-800 dark:text-slate-200">{createdOrder.trackingNumber}</span>
           </div>
           <div className="flex justify-between">
@@ -1945,8 +1949,8 @@ function CheckoutWizard({ onNavigate }) {
             <span className="font-semibold text-emerald-500">{createdOrder.estimatedDelivery}</span>
           </div>
           <div className="flex justify-between font-bold pt-2 border-t border-slate-200 dark:border-slate-700">
-            <span>Total Paid:</span>
-            <span className="text-slate-900 dark:text-white">${createdOrder.totalAmount.toFixed(2)}</span>
+            <span>Total Amount Paid:</span>
+            <span className="text-slate-900 dark:text-white">{formatINR(createdOrder.totalAmount)}</span>
           </div>
         </div>
 
@@ -1974,9 +1978,9 @@ function CheckoutWizard({ onNavigate }) {
       {/* Wizard Progress Bar */}
       <div className="flex items-center justify-between max-w-lg mx-auto">
         {[
-          { num: 1, title: 'Shipping' },
-          { num: 2, title: 'Payment' },
-          { num: 3, title: 'Review' }
+          { num: 1, title: 'Indian Address' },
+          { num: 2, title: 'UPI / Payment' },
+          { num: 3, title: 'Review Order' }
         ].map((s) => (
           <div key={s.num} className="flex items-center gap-2">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${
@@ -2002,11 +2006,11 @@ function CheckoutWizard({ onNavigate }) {
           {step === 1 && (
             <form onSubmit={handleNext} className="space-y-4">
               <h3 className="font-display font-bold text-lg text-slate-900 dark:text-white mb-4">
-                1. Shipping Address
+                1. Shipping Address (India)
               </h3>
 
               <div>
-                <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Full Name</label>
+                <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Full Name *</label>
                 <input
                   type="text"
                   required
@@ -2017,7 +2021,7 @@ function CheckoutWizard({ onNavigate }) {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Street Address</label>
+                <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Flat, House No., Building, Street Address *</label>
                 <input
                   type="text"
                   required
@@ -2027,37 +2031,49 @@ function CheckoutWizard({ onNavigate }) {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400">City</label>
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400">City / Town *</label>
                   <input
                     type="text"
                     required
                     value={shippingAddress.city}
                     onChange={(e) => setShippingAddress({ ...shippingAddress, city: e.target.value })}
-                    className="w-full mt-1 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+                    className="w-full mt-1 px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Postal / Zip Code</label>
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400">State *</label>
                   <input
                     type="text"
                     required
-                    value={shippingAddress.zipCode}
-                    onChange={(e) => setShippingAddress({ ...shippingAddress, zipCode: e.target.value })}
-                    className="w-full mt-1 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+                    value={shippingAddress.state}
+                    onChange={(e) => setShippingAddress({ ...shippingAddress, state: e.target.value })}
+                    className="w-full mt-1 px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Pincode (6 digits) *</label>
+                  <input
+                    type="text"
+                    required
+                    maxLength="6"
+                    placeholder="560038"
+                    value={shippingAddress.pincode}
+                    onChange={(e) => setShippingAddress({ ...shippingAddress, pincode: e.target.value })}
+                    className="w-full mt-1 px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Phone Number</label>
+                <label className="text-xs font-bold text-slate-500 dark:text-slate-400">Mobile Number (10 digits) *</label>
                 <input
                   type="text"
                   required
                   value={shippingAddress.phone}
                   onChange={(e) => setShippingAddress({ ...shippingAddress, phone: e.target.value })}
-                  className="w-full mt-1 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full mt-1 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
                 />
               </div>
 
@@ -2073,11 +2089,16 @@ function CheckoutWizard({ onNavigate }) {
           {step === 2 && (
             <form onSubmit={handleNext} className="space-y-4">
               <h3 className="font-display font-bold text-lg text-slate-900 dark:text-white mb-4">
-                2. Payment Method
+                2. Indian Payment Options
               </h3>
 
               <div className="grid grid-cols-2 gap-3">
-                {['Credit Card', 'UPI Instant', 'Net Banking', 'Cash on Delivery'].map((m) => (
+                {[
+                  'UPI (Google Pay / PhonePe / Paytm)',
+                  'Cash on Delivery (COD)',
+                  'Debit / Credit Card',
+                  'Net Banking'
+                ].map((m) => (
                   <button
                     key={m}
                     type="button"
@@ -2094,37 +2115,17 @@ function CheckoutWizard({ onNavigate }) {
                 ))}
               </div>
 
-              {paymentMethod === 'Credit Card' && (
-                <div className="space-y-3 pt-3">
-                  <div>
-                    <label className="text-xs font-bold text-slate-500">Card Number</label>
-                    <input
-                      type="text"
-                      value={cardDetails.cardNumber}
-                      onChange={(e) => setCardDetails({ ...cardDetails, cardNumber: e.target.value })}
-                      className="w-full mt-1 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-xs font-bold text-slate-500">Exp Date</label>
-                      <input
-                        type="text"
-                        value={cardDetails.expDate}
-                        onChange={(e) => setCardDetails({ ...cardDetails, expDate: e.target.value })}
-                        className="w-full mt-1 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-xs font-bold text-slate-500">CVV</label>
-                      <input
-                        type="password"
-                        value={cardDetails.cvv}
-                        onChange={(e) => setCardDetails({ ...cardDetails, cvv: e.target.value })}
-                        className="w-full mt-1 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
-                      />
-                    </div>
-                  </div>
+              {paymentMethod.includes('UPI') && (
+                <div className="space-y-3 pt-3 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Virtual Payment Address (VPA / UPI ID)</label>
+                  <input
+                    type="text"
+                    value={upiId}
+                    onChange={(e) => setUpiId(e.target.value)}
+                    placeholder="yourname@okaxis or mobile@paytm"
+                    className="w-full mt-1 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs font-mono text-slate-900 dark:text-white"
+                  />
+                  <p className="text-[11px] text-slate-500">Pay via Google Pay, PhonePe, Paytm, or BHIM UPI.</p>
                 </div>
               )}
 
@@ -2153,10 +2154,10 @@ function CheckoutWizard({ onNavigate }) {
               </h3>
 
               <div className="space-y-3">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">Shipping To</h4>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">Delivery Address</h4>
                 <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs space-y-1">
                   <p className="font-bold text-slate-900 dark:text-white">{shippingAddress.fullName}</p>
-                  <p className="text-slate-600 dark:text-slate-300">{shippingAddress.street}, {shippingAddress.city}, {shippingAddress.zipCode}</p>
+                  <p className="text-slate-600 dark:text-slate-300">{shippingAddress.street}, {shippingAddress.city}, {shippingAddress.state} - {shippingAddress.pincode}</p>
                   <p className="text-slate-500">{shippingAddress.phone}</p>
                 </div>
               </div>
@@ -2165,12 +2166,12 @@ function CheckoutWizard({ onNavigate }) {
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">Items in Order</h4>
                 <div className="space-y-2">
                   {cartItems.map(({ product, quantity }) => (
-                    <div key={product.id} className="flex items-center justify-between text-xs p-2 rounded-xl bg-slate-50 dark:bg-slate-800/40">
+                    <div key={product.id} className="flex items-center justify-between text-xs p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/40">
                       <span className="font-medium text-slate-800 dark:text-slate-200 truncate max-w-xs">
                         {quantity}x {product.title}
                       </span>
                       <span className="font-bold text-slate-900 dark:text-white">
-                        ${(product.price * quantity).toFixed(2)}
+                        {formatINR(product.price * quantity)}
                       </span>
                     </div>
                   ))}
@@ -2190,7 +2191,7 @@ function CheckoutWizard({ onNavigate }) {
                   disabled={loading}
                   className="flex-1 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-xl transition-all disabled:opacity-50"
                 >
-                  {loading ? 'Processing Payment...' : `Confirm & Pay $${total.toFixed(2)}`}
+                  {loading ? 'Processing Payment...' : `Confirm & Pay ${formatINR(total)}`}
                 </button>
               </div>
             </div>
@@ -2207,27 +2208,23 @@ function CheckoutWizard({ onNavigate }) {
           <div className="space-y-2 text-xs text-slate-600 dark:text-slate-400">
             <div className="flex justify-between">
               <span>Items Subtotal</span>
-              <span className="font-medium text-slate-900 dark:text-white">${subtotal.toFixed(2)}</span>
+              <span className="font-medium text-slate-900 dark:text-white">{formatINR(subtotal)}</span>
             </div>
             <div className="flex justify-between">
-              <span>Shipping Fee</span>
+              <span>Delivery Charges</span>
               <span className="font-medium text-slate-900 dark:text-white">
-                {shippingFee === 0 ? 'FREE' : `$${shippingFee.toFixed(2)}`}
+                {shippingFee === 0 ? 'FREE' : formatINR(shippingFee)}
               </span>
             </div>
-            <div className="flex justify-between">
-              <span>Estimated Tax (8%)</span>
-              <span className="font-medium text-slate-900 dark:text-white">${tax.toFixed(2)}</span>
-            </div>
             <div className="flex justify-between text-base font-bold text-slate-900 dark:text-white pt-3 border-t border-slate-200 dark:border-slate-800">
-              <span>Total Due</span>
-              <span className="text-brand-600 dark:text-brand-400">${total.toFixed(2)}</span>
+              <span>Total Payable</span>
+              <span className="text-brand-600 dark:text-brand-400">{formatINR(total)}</span>
             </div>
           </div>
 
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-[11px] text-slate-500 space-y-1">
-            <p>✓ 256-Bit SSL Encrypted Payment</p>
-            <p>✓ 30-Day Money-Back Guarantee</p>
+            <p>✓ 100% Buyer Protection</p>
+            <p>✓ GST Invoice Included</p>
           </div>
         </div>
 
@@ -2894,7 +2891,6 @@ function ProductDetailPage({ productId, onSelectProduct, onNavigate }) {
       const res = await api.getProductById(productId);
       if (res.success) {
         setProduct(res.data);
-        // Load related category products
         const relRes = await api.getProducts({ category: res.data.category });
         if (relRes.success) {
           setRelatedProducts(relRes.data.filter(p => p.id !== productId).slice(0, 4));
@@ -2961,7 +2957,7 @@ function ProductDetailPage({ productId, onSelectProduct, onNavigate }) {
             />
             {discount > 0 && (
               <span className="absolute top-4 left-4 px-3 py-1.5 rounded-xl bg-rose-500 text-white font-black text-xs shadow-lg">
-                -{discount}% DISCOUNT
+                -{discount}% SPECIAL DISCOUNT
               </span>
             )}
           </div>
@@ -3010,19 +3006,19 @@ function ProductDetailPage({ productId, onSelectProduct, onNavigate }) {
             </div>
           </div>
 
-          {/* Pricing Box */}
+          {/* Pricing Box in INR */}
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 flex items-baseline gap-3">
             <span className="font-display font-black text-3xl text-slate-900 dark:text-white">
-              ${product.price ? product.price.toFixed(2) : '0.00'}
+              {formatINR(product.price)}
             </span>
             {product.originalPrice && product.originalPrice > product.price && (
               <span className="text-base text-slate-400 line-through font-light">
-                ${product.originalPrice.toFixed(2)}
+                {formatINR(product.originalPrice)}
               </span>
             )}
             {discount > 0 && (
               <span className="text-xs font-bold text-rose-500 ml-auto">
-                You Save ${(product.originalPrice - product.price).toFixed(2)}
+                You Save {formatINR(product.originalPrice - product.price)}
               </span>
             )}
           </div>
@@ -3123,6 +3119,7 @@ function ProductDetailPage({ productId, onSelectProduct, onNavigate }) {
 
 /* --- File: src/pages/CartPage.jsx --- */
 
+
 function CartPage({ onNavigate }) {
   const {
     cartItems,
@@ -3135,9 +3132,7 @@ function CartPage({ onNavigate }) {
     total,
     updateQuantity,
     removeFromCart,
-    clearCart,
-    applyCoupon,
-    removeCoupon
+    clearCart
   } = useCart();
 
   if (cartItems.length === 0) {
@@ -3145,7 +3140,7 @@ function CartPage({ onNavigate }) {
       <div className="max-w-md mx-auto my-16 text-center space-y-4 p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl">
         <div className="text-5xl">🛒</div>
         <h2 className="font-display font-bold text-xl text-slate-900 dark:text-white">Your Shopping Cart is Empty</h2>
-        <p className="text-xs text-slate-500">Explore our catalog to discover incredible deals on top items.</p>
+        <p className="text-xs text-slate-500">Explore our catalog to discover incredible festive deals.</p>
         <button
           onClick={() => onNavigate('products')}
           className="px-6 py-3 rounded-2xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold shadow-lg transition-all"
@@ -3164,7 +3159,7 @@ function CartPage({ onNavigate }) {
           <h1 className="font-display font-black text-2xl sm:text-3xl text-slate-900 dark:text-white">
             Shopping Cart ({cartCount} Items)
           </h1>
-          <p className="text-xs text-slate-500">Review your items before proceeding to checkout</p>
+          <p className="text-xs text-slate-500">Review your items before proceeding to Indian checkout</p>
         </div>
 
         <button
@@ -3196,7 +3191,7 @@ function CartPage({ onNavigate }) {
                   {product.title}
                 </h3>
                 <p className="text-xs font-extrabold text-slate-900 dark:text-white">
-                  ${product.price.toFixed(2)} each
+                  {formatINR(product.price)} each
                 </p>
               </div>
 
@@ -3217,8 +3212,8 @@ function CartPage({ onNavigate }) {
                   </button>
                 </div>
 
-                <span className="font-display font-black text-sm text-brand-600 dark:text-brand-400 w-20 text-right">
-                  ${(product.price * quantity).toFixed(2)}
+                <span className="font-display font-black text-sm text-brand-600 dark:text-brand-400 w-24 text-right">
+                  {formatINR(product.price * quantity)}
                 </span>
 
                 <button
@@ -3242,27 +3237,23 @@ function CartPage({ onNavigate }) {
           <div className="space-y-2 text-xs text-slate-600 dark:text-slate-400">
             <div className="flex justify-between">
               <span>Subtotal</span>
-              <span className="font-medium text-slate-900 dark:text-white">${subtotal.toFixed(2)}</span>
+              <span className="font-medium text-slate-900 dark:text-white">{formatINR(subtotal)}</span>
             </div>
             {couponDiscount > 0 && (
               <div className="flex justify-between text-emerald-500 font-semibold">
                 <span>Coupon ({coupon.code})</span>
-                <span>-${couponDiscount.toFixed(2)}</span>
+                <span>-{formatINR(couponDiscount)}</span>
               </div>
             )}
             <div className="flex justify-between">
-              <span>Shipping Fee</span>
+              <span>Delivery Charges</span>
               <span className="font-medium text-slate-900 dark:text-white">
-                {shippingFee === 0 ? 'FREE' : `$${shippingFee.toFixed(2)}`}
+                {shippingFee === 0 ? 'FREE' : formatINR(shippingFee)}
               </span>
-            </div>
-            <div className="flex justify-between">
-              <span>Estimated Tax (8%)</span>
-              <span className="font-medium text-slate-900 dark:text-white">${tax.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-base font-bold text-slate-900 dark:text-white pt-3 border-t border-slate-200 dark:border-slate-800">
               <span>Total Price</span>
-              <span className="text-brand-600 dark:text-brand-400">${total.toFixed(2)}</span>
+              <span className="text-brand-600 dark:text-brand-400">{formatINR(total)}</span>
             </div>
           </div>
 
@@ -3394,7 +3385,7 @@ function OrdersPage({ onNavigate }) {
         <h1 className="font-display font-black text-2xl sm:text-3xl text-slate-900 dark:text-white">
           My Orders & Live Tracking
         </h1>
-        <p className="text-xs text-slate-500">Track package status and view order receipts</p>
+        <p className="text-xs text-slate-500">Track package status and download GST tax invoices</p>
       </div>
 
       {orders.length === 0 ? (
@@ -3431,14 +3422,14 @@ function OrdersPage({ onNavigate }) {
                       </span>
                     </div>
                     <p className="text-[11px] text-slate-500">
-                      Placed on {new Date(order.date).toLocaleDateString()} • Tracking: <span className="font-mono text-slate-700 dark:text-slate-300">{order.trackingNumber}</span>
+                      Placed on {new Date(order.date).toLocaleDateString()} • Tracking AWB: <span className="font-mono text-slate-700 dark:text-slate-300">{order.trackingNumber}</span>
                     </p>
                   </div>
 
                   <div className="text-right">
                     <span className="text-xs text-slate-400">Total Paid</span>
                     <p className="font-display font-black text-lg text-slate-900 dark:text-white">
-                      ${order.totalAmount.toFixed(2)}
+                      {formatINR(order.totalAmount)}
                     </p>
                   </div>
                 </div>
@@ -3477,7 +3468,7 @@ function OrdersPage({ onNavigate }) {
                       />
                       <div className="flex-1 min-w-0">
                         <p className="font-bold text-xs text-slate-900 dark:text-white truncate">{item.title}</p>
-                        <p className="text-[11px] text-slate-500">{item.quantity}x ${item.price}</p>
+                        <p className="text-[11px] text-slate-500">{item.quantity}x {formatINR(item.price)}</p>
                       </div>
                     </div>
                   ))}
@@ -3500,7 +3491,7 @@ function AdminDashboardPage({ onNavigate }) {
   const { isAdmin } = useAuth();
   const { addToast } = useToast();
 
-  const [activeTab, setActiveTab] = useState('products'); // products | orders
+  const [activeTab, setActiveTab] = useState('products');
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -3590,7 +3581,7 @@ function AdminDashboardPage({ onNavigate }) {
               SYSTEM ADMIN
             </span>
           </div>
-          <p className="text-xs text-slate-500">Manage catalog products, monitor sales revenue, and update customer order status</p>
+          <p className="text-xs text-slate-500">Manage catalog products in ₹, monitor sales revenue, and update customer order status</p>
         </div>
 
         <button
@@ -3608,7 +3599,7 @@ function AdminDashboardPage({ onNavigate }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-1">
           <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Sales Revenue</span>
-          <div className="font-display font-black text-2xl text-emerald-500">${totalRevenue.toFixed(2)}</div>
+          <div className="font-display font-black text-2xl text-emerald-500">{formatINR(totalRevenue)}</div>
         </div>
 
         <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-1">
@@ -3660,7 +3651,7 @@ function AdminDashboardPage({ onNavigate }) {
                 <tr>
                   <th className="p-4">Product Info</th>
                   <th className="p-4">Category</th>
-                  <th className="p-4">Price</th>
+                  <th className="p-4">Price (₹)</th>
                   <th className="p-4">Stock</th>
                   <th className="p-4">Rating</th>
                   <th className="p-4 text-right">Actions</th>
@@ -3681,7 +3672,7 @@ function AdminDashboardPage({ onNavigate }) {
                       </div>
                     </td>
                     <td className="p-4 capitalize font-semibold text-slate-700 dark:text-slate-300">{prod.category}</td>
-                    <td className="p-4 font-bold text-slate-900 dark:text-white">${prod.price.toFixed(2)}</td>
+                    <td className="p-4 font-bold text-slate-900 dark:text-white">{formatINR(prod.price)}</td>
                     <td className="p-4 font-semibold">
                       <span className={`px-2 py-0.5 rounded-full text-[10px] ${
                         prod.stockCount > 0 ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'
@@ -3724,7 +3715,7 @@ function AdminDashboardPage({ onNavigate }) {
                   <th className="p-4">Order ID</th>
                   <th className="p-4">Customer</th>
                   <th className="p-4">Items</th>
-                  <th className="p-4">Total</th>
+                  <th className="p-4">Total (₹)</th>
                   <th className="p-4">Status</th>
                   <th className="p-4 text-right">Update Status</th>
                 </tr>
@@ -3738,7 +3729,7 @@ function AdminDashboardPage({ onNavigate }) {
                       <span className="text-[10px] text-slate-400">{ord.customerEmail}</span>
                     </td>
                     <td className="p-4 font-semibold">{ord.items.length} items</td>
-                    <td className="p-4 font-bold text-slate-900 dark:text-white">${ord.totalAmount.toFixed(2)}</td>
+                    <td className="p-4 font-bold text-slate-900 dark:text-white">{formatINR(ord.totalAmount)}</td>
                     <td className="p-4 font-bold">
                       <span className="px-2.5 py-1 rounded-full bg-brand-500/10 text-brand-600 dark:text-brand-400">
                         {ord.status}

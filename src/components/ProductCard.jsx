@@ -1,5 +1,6 @@
 import { useCart } from '../context/CartContext.jsx';
 import { useWishlist } from '../context/WishlistContext.jsx';
+import { formatINR } from '../utils/formatters.js';
 
 export function ProductCard({ product, onSelectProduct, viewMode = 'grid' }) {
   const { addToCart } = useCart();
@@ -24,7 +25,7 @@ export function ProductCard({ product, onSelectProduct, viewMode = 'grid' }) {
           />
           {discount > 0 && (
             <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-rose-500 text-white text-[10px] font-extrabold">
-              -{discount}%
+              -{discount}% OFF
             </span>
           )}
         </div>
@@ -56,11 +57,11 @@ export function ProductCard({ product, onSelectProduct, viewMode = 'grid' }) {
           <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
             <div className="flex items-baseline gap-2">
               <span className="font-display font-black text-xl text-slate-900 dark:text-white">
-                ${product.price ? product.price.toFixed(2) : '0.00'}
+                {formatINR(product.price)}
               </span>
               {product.originalPrice && product.originalPrice > product.price && (
                 <span className="text-xs text-slate-400 line-through">
-                  ${product.originalPrice.toFixed(2)}
+                  {formatINR(product.originalPrice)}
                 </span>
               )}
             </div>
@@ -109,12 +110,12 @@ export function ProductCard({ product, onSelectProduct, viewMode = 'grid' }) {
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
           {discount > 0 && (
             <span className="px-2.5 py-1 rounded-lg bg-rose-500 text-white text-[11px] font-extrabold tracking-wide shadow-md">
-              -{discount}%
+              -{discount}% OFF
             </span>
           )}
           {product.isFeatured && (
             <span className="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 text-[10px] font-bold tracking-wider uppercase shadow-md">
-              FEATURED
+              FESTIVE DEAL
             </span>
           )}
         </div>
@@ -169,11 +170,11 @@ export function ProductCard({ product, onSelectProduct, viewMode = 'grid' }) {
           <div>
             <div className="flex items-baseline gap-1.5">
               <span className="font-display font-extrabold text-base text-slate-900 dark:text-white">
-                ${product.price ? product.price.toFixed(2) : '0.00'}
+                {formatINR(product.price)}
               </span>
               {product.originalPrice && product.originalPrice > product.price && (
                 <span className="text-xs text-slate-400 line-through font-light">
-                  ${product.originalPrice.toFixed(2)}
+                  {formatINR(product.originalPrice)}
                 </span>
               )}
             </div>

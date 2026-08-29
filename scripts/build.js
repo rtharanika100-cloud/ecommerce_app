@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const fileOrder = [
+  'src/utils/formatters.js',
   'src/services/api.js',
   'src/context/ThemeContext.jsx',
   'src/context/ToastContext.jsx',

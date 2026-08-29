@@ -1,38 +1,39 @@
 const { useState, useEffect } = React;
+import { formatINR } from '../utils/formatters.js';
 
 const BANNERS = [
   {
     id: 1,
-    title: "Revolutionize Your Audio Experience",
-    subtitle: "NEXT-GEN NOISE CANCELLATION",
-    description: "Immerse yourself in audiophile sound dynamics with the newly released AuraSound Pro Wireless Headphones.",
-    buttonText: "Shop Audio Deals",
+    title: "Diwali Mega Sale 🪔 Up to 80% OFF",
+    subtitle: "THE GREAT INDIAN FESTIVAL",
+    description: "Celebrate Diwali with unbelievable discounts on Audiophile Noise-Canceling Headphones, Smartwatches, and Mobiles.",
+    buttonText: "Shop Diwali Deals",
     category: "electronics",
-    badge: "24% OFF THIS WEEK",
+    badge: "BIG BILLION DEALS",
     image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1200",
-    gradient: "from-indigo-900/90 via-slate-900/80 to-transparent"
-  },
-  {
-    id: 2,
-    title: "Scandinavian Minimalist Home Essentials",
-    subtitle: "MODERN LIVING COLLECTION",
-    description: "Transform your living space with solid walnut lamps, ceramic decor, and sustainable handcrafted furniture.",
-    buttonText: "Explore Home Decor",
-    category: "home-living",
-    badge: "NEW ARRIVALS",
-    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=1200",
     gradient: "from-amber-950/90 via-slate-900/80 to-transparent"
   },
   {
-    id: 3,
-    title: "Urban Tactical & Weatherproof Streetwear",
-    subtitle: "AETHER STUDIO FASHION",
-    description: "Breathable storm-proof parkas, utility coats, and sleek footwear built for modern outdoor aesthetics.",
-    buttonText: "Discover Fashion",
+    id: 2,
+    title: "Traditional Ethnic Wear & Festive Festive Fashion",
+    subtitle: "INDIAN ETHNIC THREADS",
+    description: "Handcrafted Lucknowi Chikankari Kurta sets, Sarees, and designer festive ethnic fashion starting at just ₹999.",
+    buttonText: "Explore Ethnic Wear",
     category: "fashion",
-    badge: "TRENDING NOW",
+    badge: "FLAT 50% OFF",
     image: "https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&q=80&w=1200",
-    gradient: "from-slate-950/90 via-slate-900/80 to-transparent"
+    gradient: "from-rose-950/90 via-slate-900/80 to-transparent"
+  },
+  {
+    id: 3,
+    title: "Upgrade Your Home & Kitchen Setup",
+    subtitle: "FESTIVE HOME DECOR",
+    description: "Solid walnut lamps, brass diyas, designer bedsheets, and stainless cookware deals under ₹1,999.",
+    buttonText: "Shop Home Decor",
+    category: "home-living",
+    badge: "FESTIVE SPECIAL",
+    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=1200",
+    gradient: "from-indigo-950/90 via-slate-900/80 to-transparent"
   }
 ];
 
@@ -64,7 +65,7 @@ export function HeroCarousel({ onSelectCategory, onNavigate }) {
         {/* Content Container */}
         <div className="relative z-10 h-full max-w-7xl mx-auto px-6 sm:px-12 flex flex-col justify-center max-w-2xl text-white">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-500/30 backdrop-blur-md border border-brand-400/40 text-brand-300 text-xs font-bold w-fit mb-4">
-            <span>🔥</span>
+            <span>🪔</span>
             <span>{slide.badge}</span>
           </div>
 

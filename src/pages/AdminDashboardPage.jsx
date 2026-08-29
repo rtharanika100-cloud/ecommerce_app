@@ -1,6 +1,7 @@
 const { useState, useEffect } = React;
 import { useAuth } from '../context/AuthContext.jsx';
 import { useToast } from '../context/ToastContext.jsx';
+import { formatINR } from '../utils/formatters.js';
 import { AdminProductModal } from '../components/AdminProductModal.jsx';
 import { api } from '../services/api.js';
 
@@ -8,7 +9,7 @@ export function AdminDashboardPage({ onNavigate }) {
   const { isAdmin } = useAuth();
   const { addToast } = useToast();
 
-  const [activeTab, setActiveTab] = useState('products'); // products | orders
+  const [activeTab, setActiveTab] = useState('products');
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -98,7 +99,7 @@ export function AdminDashboardPage({ onNavigate }) {
               SYSTEM ADMIN
             </span>
           </div>
-          <p className="text-xs text-slate-500">Manage catalog products, monitor sales revenue, and update customer order status</p>
+          <p className="text-xs text-slate-500">Manage catalog products in ₹, monitor sales revenue, and update customer order status</p>
         </div>
 
         <button
@@ -116,7 +117,7 @@ export function AdminDashboardPage({ onNavigate }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-1">
           <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Sales Revenue</span>
-          <div className="font-display font-black text-2xl text-emerald-500">${totalRevenue.toFixed(2)}</div>
+          <div className="font-display font-black text-2xl text-emerald-500">{formatINR(totalRevenue)}</div>
         </div>
 
         <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-1">
@@ -168,7 +169,7 @@ export function AdminDashboardPage({ onNavigate }) {
                 <tr>
                   <th className="p-4">Product Info</th>
                   <th className="p-4">Category</th>
-                  <th className="p-4">Price</th>
+                  <th className="p-4">Price (₹)</th>
                   <th className="p-4">Stock</th>
                   <th className="p-4">Rating</th>
                   <th className="p-4 text-right">Actions</th>
@@ -189,7 +190,7 @@ export function AdminDashboardPage({ onNavigate }) {
                       </div>
                     </td>
                     <td className="p-4 capitalize font-semibold text-slate-700 dark:text-slate-300">{prod.category}</td>
-                    <td className="p-4 font-bold text-slate-900 dark:text-white">${prod.price.toFixed(2)}</td>
+                    <td className="p-4 font-bold text-slate-900 dark:text-white">{formatINR(prod.price)}</td>
                     <td className="p-4 font-semibold">
                       <span className={`px-2 py-0.5 rounded-full text-[10px] ${
                         prod.stockCount > 0 ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'
@@ -232,7 +233,7 @@ export function AdminDashboardPage({ onNavigate }) {
                   <th className="p-4">Order ID</th>
                   <th className="p-4">Customer</th>
                   <th className="p-4">Items</th>
-                  <th className="p-4">Total</th>
+                  <th className="p-4">Total (₹)</th>
                   <th className="p-4">Status</th>
                   <th className="p-4 text-right">Update Status</th>
                 </tr>
@@ -246,7 +247,7 @@ export function AdminDashboardPage({ onNavigate }) {
                       <span className="text-[10px] text-slate-400">{ord.customerEmail}</span>
                     </td>
                     <td className="p-4 font-semibold">{ord.items.length} items</td>
-                    <td className="p-4 font-bold text-slate-900 dark:text-white">${ord.totalAmount.toFixed(2)}</td>
+                    <td className="p-4 font-bold text-slate-900 dark:text-white">{formatINR(ord.totalAmount)}</td>
                     <td className="p-4 font-bold">
                       <span className="px-2.5 py-1 rounded-full bg-brand-500/10 text-brand-600 dark:text-brand-400">
                         {ord.status}

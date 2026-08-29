@@ -1,5 +1,6 @@
 const { useState, useEffect } = React;
 import { useAuth } from '../context/AuthContext.jsx';
+import { formatINR } from '../utils/formatters.js';
 import { api } from '../services/api.js';
 
 export function OrdersPage({ onNavigate }) {
@@ -51,7 +52,7 @@ export function OrdersPage({ onNavigate }) {
         <h1 className="font-display font-black text-2xl sm:text-3xl text-slate-900 dark:text-white">
           My Orders & Live Tracking
         </h1>
-        <p className="text-xs text-slate-500">Track package status and view order receipts</p>
+        <p className="text-xs text-slate-500">Track package status and download GST tax invoices</p>
       </div>
 
       {orders.length === 0 ? (
@@ -88,14 +89,14 @@ export function OrdersPage({ onNavigate }) {
                       </span>
                     </div>
                     <p className="text-[11px] text-slate-500">
-                      Placed on {new Date(order.date).toLocaleDateString()} • Tracking: <span className="font-mono text-slate-700 dark:text-slate-300">{order.trackingNumber}</span>
+                      Placed on {new Date(order.date).toLocaleDateString()} • Tracking AWB: <span className="font-mono text-slate-700 dark:text-slate-300">{order.trackingNumber}</span>
                     </p>
                   </div>
 
                   <div className="text-right">
                     <span className="text-xs text-slate-400">Total Paid</span>
                     <p className="font-display font-black text-lg text-slate-900 dark:text-white">
-                      ${order.totalAmount.toFixed(2)}
+                      {formatINR(order.totalAmount)}
                     </p>
                   </div>
                 </div>
@@ -134,7 +135,7 @@ export function OrdersPage({ onNavigate }) {
                       />
                       <div className="flex-1 min-w-0">
                         <p className="font-bold text-xs text-slate-900 dark:text-white truncate">{item.title}</p>
-                        <p className="text-[11px] text-slate-500">{item.quantity}x ${item.price}</p>
+                        <p className="text-[11px] text-slate-500">{item.quantity}x {formatINR(item.price)}</p>
                       </div>
                     </div>
                   ))}

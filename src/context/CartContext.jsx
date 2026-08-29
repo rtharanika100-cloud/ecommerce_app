@@ -1,5 +1,6 @@
 const { createContext, useContext, useState, useEffect } = React;
 import { useToast } from './ToastContext.jsx';
+import { formatINR } from '../utils/formatters.js';
 
 const CartContext = createContext();
 
@@ -10,7 +11,7 @@ export function CartProvider({ children }) {
   });
 
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [coupon, setCoupon] = useState(null); // { code, discountPercent }
+  const [coupon, setCoupon] = useState(null);
   const { addToast } = useToast();
 
   useEffect(() => {
@@ -60,16 +61,16 @@ export function CartProvider({ children }) {
 
   const applyCoupon = (code) => {
     const cleanCode = code.trim().toUpperCase();
-    if (cleanCode === 'AURA20' || cleanCode === 'PROMO20') {
+    if (cleanCode === 'DIWALI20' || cleanCode === 'AURA20') {
       setCoupon({ code: cleanCode, discountPercent: 20 });
-      if (addToast) addToast('Coupon code applied: 20% OFF!', 'success');
+      if (addToast) addToast('Diwali Special Coupon Applied: 20% OFF!', 'success');
       return true;
-    } else if (cleanCode === 'WELCOME10') {
+    } else if (cleanCode === 'FREESHIP') {
       setCoupon({ code: cleanCode, discountPercent: 10 });
-      if (addToast) addToast('Coupon code applied: 10% OFF!', 'success');
+      if (addToast) addToast('Coupon Applied: 10% OFF!', 'success');
       return true;
     } else {
-      if (addToast) addToast('Invalid promo code. Try "AURA20"', 'error');
+      if (addToast) addToast('Invalid coupon. Try "DIWALI20"', 'error');
       return false;
     }
   };
@@ -86,18 +87,13 @@ export function CartProvider({ children }) {
     0
   );
 
-  const rawSavings = cartItems.reduce(
-    (sum, item) =>
-      sum + ((item.product.originalPrice || item.product.price) - item.product.price) * item.quantity,
-    0
-  );
-
   const couponDiscount = coupon ? (subtotal * coupon.discountPercent) / 100 : 0;
   const subtotalAfterCoupon = Math.max(0, subtotal - couponDiscount);
 
-  const shippingFee = subtotalAfterCoupon > 100 || cartItems.length === 0 ? 0 : 9.99;
-  const tax = subtotalAfterCoupon * 0.08; // 8% estimated sales tax
-  const total = subtotalAfterCoupon + shippingFee + tax;
+  // Delivery Charges: Free over ₹499 else ₹50
+  const shippingFee = subtotalAfterCoupon >= 499 || cartItems.length === 0 ? 0 : 50;
+  const tax = subtotalAfterCoupon * 0.18; // 18% GST simulation
+  const total = subtotalAfterCoupon + shippingFee;
 
   return (
     <CartContext.Provider
@@ -105,7 +101,6 @@ export function CartProvider({ children }) {
         cartItems,
         cartCount,
         subtotal,
-        rawSavings,
         coupon,
         couponDiscount,
         shippingFee,

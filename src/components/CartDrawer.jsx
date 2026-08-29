@@ -1,5 +1,6 @@
 const { useState } = React;
 import { useCart } from '../context/CartContext.jsx';
+import { formatINR } from '../utils/formatters.js';
 
 export function CartDrawer({ onNavigate }) {
   const {
@@ -69,7 +70,7 @@ export function CartDrawer({ onNavigate }) {
                 </div>
                 <h3 className="font-display font-bold text-lg">Your bag is empty</h3>
                 <p className="text-xs text-slate-500 max-w-xs">
-                  Looks like you haven't added any products to your cart yet.
+                  Explore festive deals and add products to your cart.
                 </p>
                 <button
                   onClick={() => {
@@ -127,7 +128,7 @@ export function CartDrawer({ onNavigate }) {
                       </div>
 
                       <span className="font-display font-extrabold text-xs text-brand-600 dark:text-brand-400">
-                        ${(product.price * quantity).toFixed(2)}
+                        {formatINR(product.price * quantity)}
                       </span>
                     </div>
                   </div>
@@ -150,7 +151,7 @@ export function CartDrawer({ onNavigate }) {
                 <form onSubmit={handleCouponSubmit} className="flex gap-2">
                   <input
                     type="text"
-                    placeholder="Coupon code (Try AURA20)..."
+                    placeholder="Coupon code (Try DIWALI20)..."
                     value={couponCodeInput}
                     onChange={(e) => setCouponCodeInput(e.target.value)}
                     className="flex-1 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs uppercase font-medium focus:outline-none focus:border-brand-500"
@@ -168,27 +169,23 @@ export function CartDrawer({ onNavigate }) {
               <div className="space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-medium text-slate-900 dark:text-white">${subtotal.toFixed(2)}</span>
+                  <span className="font-medium text-slate-900 dark:text-white">{formatINR(subtotal)}</span>
                 </div>
                 {couponDiscount > 0 && (
                   <div className="flex justify-between text-emerald-500 font-semibold">
                     <span>Discount</span>
-                    <span>-${couponDiscount.toFixed(2)}</span>
+                    <span>-{formatINR(couponDiscount)}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <span>Estimated Shipping</span>
+                  <span>Delivery Charges</span>
                   <span className="font-medium text-slate-900 dark:text-white">
-                    {shippingFee === 0 ? 'FREE' : `$${shippingFee.toFixed(2)}`}
+                    {shippingFee === 0 ? 'FREE' : formatINR(shippingFee)}
                   </span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Tax (8%)</span>
-                  <span className="font-medium text-slate-900 dark:text-white">${tax.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm font-bold text-slate-900 dark:text-white pt-2 border-t border-slate-200 dark:border-slate-800">
                   <span>Estimated Total</span>
-                  <span className="text-brand-600 dark:text-brand-400">${total.toFixed(2)}</span>
+                  <span className="text-brand-600 dark:text-brand-400">{formatINR(total)}</span>
                 </div>
               </div>
 

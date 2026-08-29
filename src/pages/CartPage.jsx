@@ -1,4 +1,5 @@
 import { useCart } from '../context/CartContext.jsx';
+import { formatINR } from '../utils/formatters.js';
 
 export function CartPage({ onNavigate }) {
   const {
@@ -12,9 +13,7 @@ export function CartPage({ onNavigate }) {
     total,
     updateQuantity,
     removeFromCart,
-    clearCart,
-    applyCoupon,
-    removeCoupon
+    clearCart
   } = useCart();
 
   if (cartItems.length === 0) {
@@ -22,7 +21,7 @@ export function CartPage({ onNavigate }) {
       <div className="max-w-md mx-auto my-16 text-center space-y-4 p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl">
         <div className="text-5xl">🛒</div>
         <h2 className="font-display font-bold text-xl text-slate-900 dark:text-white">Your Shopping Cart is Empty</h2>
-        <p className="text-xs text-slate-500">Explore our catalog to discover incredible deals on top items.</p>
+        <p className="text-xs text-slate-500">Explore our catalog to discover incredible festive deals.</p>
         <button
           onClick={() => onNavigate('products')}
           className="px-6 py-3 rounded-2xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold shadow-lg transition-all"
@@ -41,7 +40,7 @@ export function CartPage({ onNavigate }) {
           <h1 className="font-display font-black text-2xl sm:text-3xl text-slate-900 dark:text-white">
             Shopping Cart ({cartCount} Items)
           </h1>
-          <p className="text-xs text-slate-500">Review your items before proceeding to checkout</p>
+          <p className="text-xs text-slate-500">Review your items before proceeding to Indian checkout</p>
         </div>
 
         <button
@@ -73,7 +72,7 @@ export function CartPage({ onNavigate }) {
                   {product.title}
                 </h3>
                 <p className="text-xs font-extrabold text-slate-900 dark:text-white">
-                  ${product.price.toFixed(2)} each
+                  {formatINR(product.price)} each
                 </p>
               </div>
 
@@ -94,8 +93,8 @@ export function CartPage({ onNavigate }) {
                   </button>
                 </div>
 
-                <span className="font-display font-black text-sm text-brand-600 dark:text-brand-400 w-20 text-right">
-                  ${(product.price * quantity).toFixed(2)}
+                <span className="font-display font-black text-sm text-brand-600 dark:text-brand-400 w-24 text-right">
+                  {formatINR(product.price * quantity)}
                 </span>
 
                 <button
@@ -119,27 +118,23 @@ export function CartPage({ onNavigate }) {
           <div className="space-y-2 text-xs text-slate-600 dark:text-slate-400">
             <div className="flex justify-between">
               <span>Subtotal</span>
-              <span className="font-medium text-slate-900 dark:text-white">${subtotal.toFixed(2)}</span>
+              <span className="font-medium text-slate-900 dark:text-white">{formatINR(subtotal)}</span>
             </div>
             {couponDiscount > 0 && (
               <div className="flex justify-between text-emerald-500 font-semibold">
                 <span>Coupon ({coupon.code})</span>
-                <span>-${couponDiscount.toFixed(2)}</span>
+                <span>-{formatINR(couponDiscount)}</span>
               </div>
             )}
             <div className="flex justify-between">
-              <span>Shipping Fee</span>
+              <span>Delivery Charges</span>
               <span className="font-medium text-slate-900 dark:text-white">
-                {shippingFee === 0 ? 'FREE' : `$${shippingFee.toFixed(2)}`}
+                {shippingFee === 0 ? 'FREE' : formatINR(shippingFee)}
               </span>
-            </div>
-            <div className="flex justify-between">
-              <span>Estimated Tax (8%)</span>
-              <span className="font-medium text-slate-900 dark:text-white">${tax.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-base font-bold text-slate-900 dark:text-white pt-3 border-t border-slate-200 dark:border-slate-800">
               <span>Total Price</span>
-              <span className="text-brand-600 dark:text-brand-400">${total.toFixed(2)}</span>
+              <span className="text-brand-600 dark:text-brand-400">{formatINR(total)}</span>
             </div>
           </div>
 

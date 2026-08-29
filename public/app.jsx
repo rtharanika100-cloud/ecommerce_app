@@ -2637,8 +2637,8 @@ function ProductListPage({
   // Layout View Mode state (grid or list)
   const [viewMode, setViewMode] = useState('grid');
 
-  // Filter state
-  const [priceRange, setPriceRange] = useState(500);
+  // Filter state in INR
+  const [priceRange, setPriceRange] = useState(50000);
   const [minRating, setMinRating] = useState(0);
   const [inStockOnly, setInStockOnly] = useState(false);
   const [sortOption, setSortOption] = useState('featured');
@@ -2662,7 +2662,7 @@ function ProductListPage({
         const params = {
           q: searchQuery,
           category: selectedCategory,
-          maxPrice: priceRange < 500 ? priceRange : undefined,
+          maxPrice: priceRange < 50000 ? priceRange : undefined,
           minRating: minRating > 0 ? minRating : undefined,
           inStock: inStockOnly ? 'true' : undefined,
           sort: sortOption
@@ -2685,7 +2685,7 @@ function ProductListPage({
   const handleResetFilters = () => {
     setSearchQuery('');
     setSelectedCategory('all');
-    setPriceRange(500);
+    setPriceRange(50000);
     setMinRating(0);
     setInStockOnly(false);
     setSortOption('featured');
@@ -2701,7 +2701,7 @@ function ProductListPage({
             Product Catalog
           </h1>
           <p className="text-xs text-slate-500">
-            Showing {products.length} curated products across our luxury catalog
+            Showing {products.length} curated products with Indian Rupee (₹) pricing
           </p>
         </div>
 
@@ -2720,10 +2720,10 @@ function ProductListPage({
                 <button onClick={() => setSearchQuery('')} className="hover:text-white">✕</button>
               </span>
             )}
-            {priceRange < 500 && (
+            {priceRange < 50000 && (
               <span className="px-3 py-1 rounded-full bg-brand-500/10 text-brand-600 dark:text-brand-400 text-xs font-semibold flex items-center gap-1.5 border border-brand-500/30">
-                Under ${priceRange}
-                <button onClick={() => setPriceRange(500)} className="hover:text-white">✕</button>
+                Under {formatINR(priceRange)}
+                <button onClick={() => setPriceRange(50000)} className="hover:text-white">✕</button>
               </span>
             )}
           </div>

@@ -93,7 +93,12 @@
         "40 hours total playback time",
         "Fast charge: 10 mins charge = 5 hrs play"
       ],
-      "tags": ["audio", "headphones", "bluetooth", "festive-sale"]
+      "tags": [
+        "audio",
+        "headphones",
+        "bluetooth",
+        "festive-sale"
+      ]
     },
     {
       "id": "prod_2",
@@ -119,7 +124,11 @@
         "SpO2 & Sleep Tracker",
         "Water resistant up to 50m"
       ],
-      "tags": ["smartwatch", "fitness", "mobiles"]
+      "tags": [
+        "smartwatch",
+        "fitness",
+        "mobiles"
+      ]
     },
     {
       "id": "prod_3",
@@ -145,7 +154,12 @@
         "Ideal for Diwali, Weddings & Festivals",
         "Regular Comfort Fit"
       ],
-      "tags": ["ethnic", "kurta", "diwali-sale", "fashion"]
+      "tags": [
+        "ethnic",
+        "kurta",
+        "diwali-sale",
+        "fashion"
+      ]
     },
     {
       "id": "prod_4",
@@ -171,7 +185,11 @@
         "Solid FSC Walnut Wood Base",
         "Flicker-Free Soft Eye-Care Diffuser"
       ],
-      "tags": ["home", "lighting", "decor"]
+      "tags": [
+        "home",
+        "lighting",
+        "decor"
+      ]
     },
     {
       "id": "prod_5",
@@ -197,7 +215,12 @@
         "Improves natural skin glow & texture",
         "Suitable for all skin types"
       ],
-      "tags": ["ayurveda", "skincare", "glow", "beauty"]
+      "tags": [
+        "ayurveda",
+        "skincare",
+        "glow",
+        "beauty"
+      ]
     },
     {
       "id": "prod_6",
@@ -223,7 +246,11 @@
         "Chevrons rubber grip for firm control",
         "Free bat cover included"
       ],
-      "tags": ["sports", "cricket", "fitness"]
+      "tags": [
+        "sports",
+        "cricket",
+        "fitness"
+      ]
     }
   ],
   "reviews": [
@@ -239,6 +266,38 @@
     }
   ],
   "orders": [
+    {
+      "id": "ORD-29659",
+      "userId": "usr_guest",
+      "customerName": "Aarav Sharma",
+      "customerEmail": "customer@example.com",
+      "date": "2026-08-29T11:37:26.552Z",
+      "items": [
+        {
+          "productId": "prod_2",
+          "title": "Minimalist Ceramic Smart Watch Horizon Edition",
+          "price": 2999,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800"
+        }
+      ],
+      "shippingAddress": {
+        "fullName": "Aarav Sharma",
+        "street": "Flat 402, Sunshine Apartments, MG Road",
+        "city": "Bengaluru",
+        "state": "Karnataka",
+        "pincode": "560038",
+        "phone": "+91 98765 43210"
+      },
+      "paymentMethod": "UPI (aarav@okaxis)",
+      "subtotal": 2999,
+      "tax": 539.8199999999999,
+      "shippingFee": 0,
+      "totalAmount": 2999,
+      "status": "Placed",
+      "trackingNumber": "TRK289402954US",
+      "estimatedDelivery": "2026-09-02"
+    },
     {
       "id": "ORD-IND-98241",
       "userId": "usr_1",
